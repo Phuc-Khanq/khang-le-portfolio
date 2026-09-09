@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khang Le | Artist & Musician</title>
+  <title>Khang Le | Artist, Songwriter, Producer</title>
   <link rel="stylesheet" href="styles/main.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- ============ HEADER & NAVIGATION ============ -->
   <header>
     <div class="header-container">
-      <div class="logo">Khang <span class="highlight">Le</span></div>
+      <div class="logo">khang <span class="highlight">le</span></div>
       <nav>
         <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="projects.html">Projects</a></li>
+          <li><a href="index.html">home</a></li>
+          <li><a href="about.html">about</a></li>
+          <li><a href="projects.html">work</a></li>
         </ul>
       </nav>
       <div class="hamburger">
@@ -33,25 +33,108 @@
   <main>
     <section class="hero">
       <div class="hero-content">
-        <h1>I'm <span style="color: #E63946;">Khang Le</span></h1>
-        <p class="subtitle">Artist | Creator | Musician</p>
-        <p>Welcome to my portfolio. I create bold, artistic music and share my journey with the world. Let's connect and explore together.</p>
-        <a href="#newsletter" class="btn btn-primary">Join My Newsletter</a>
+        <h1>i make music that feels</h1>
+        <p class="subtitle">artist, songwriter, rapper, producer</p>
+        <p>
+          indie hip hop. love songs. a little depressive, a lot introspective.<br>
+          <em>vietnamese joji energy.</em>
+        </p>
+
+        <div class="cta-group">
+          <a href="#work" class="btn btn-primary">listen to my work</a>
+          <a href="#newsletter" class="btn btn-secondary">stay updated</a>
+        </div>
+
+        <!-- Social Links -->
+        <div style="margin-top: var(--spacing-xl); display: flex; justify-content: center; gap: var(--spacing-lg); flex-wrap: wrap; font-size: 0.9rem;">
+          <a href="#" title="spotify">spotify</a>
+          <a href="#" title="youtube">youtube</a>
+          <a href="#" title="soundcloud">soundcloud</a>
+          <a href="#" title="instagram">instagram</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURED WORKS PREVIEW ============ -->
+    <section id="work">
+      <h2>recent work</h2>
+      <p style="text-align: center; color: var(--color-text-secondary); margin-bottom: var(--spacing-xxl); text-transform: lowercase;">
+        songs and projects that reflect where i am right now
+      </p>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <div class="project-card">
+          <div class="project-card-image">
+            <span>🎵</span>
+          </div>
+          <div class="project-card-content">
+            <p class="project-date">coming soon</p>
+            <h3>untitled project</h3>
+            <p>
+              working on something dark and introspective.
+              a mix of sadness and chill vibes.
+            </p>
+            <div class="project-links">
+              <a href="#">← coming soon</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card">
+          <div class="project-card-image">
+            <span>🎵</span>
+          </div>
+          <div class="project-card-content">
+            <p class="project-date">in development</p>
+            <h3>first release</h3>
+            <p>
+              crafting my debut. introspective lyrics, moody production,
+              and a vibe that's deeply personal.
+            </p>
+            <div class="project-links">
+              <a href="#">← building it</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card">
+          <div class="project-card-image">
+            <span>🎵</span>
+          </div>
+          <div class="project-card-content">
+            <p class="project-date">upcoming</p>
+            <h3>love songs & sadness</h3>
+            <p>
+              exploring vulnerability in hip hop. real stories,
+              real emotions, real production.
+            </p>
+            <div class="project-links">
+              <a href="#">← more soon</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: var(--spacing-xxl);">
+        <a href="projects.html" class="btn btn-secondary">see all work →</a>
       </div>
     </section>
 
     <!-- ============ NEWSLETTER SECTION ============ -->
     <section class="newsletter-section" id="newsletter">
-      <h2>Stay Connected</h2>
-      <p>Get updates on new music, projects, and exclusive content.</p>
+      <h2>stay in the loop</h2>
+      <p>get updates when new music drops, behind-the-scenes work, and thoughts on the creative process</p>
       <form class="newsletter-form" method="POST">
         <input
           type="email"
-          placeholder="Enter your email"
+          placeholder="your email"
           required
           aria-label="Email address"
         >
-        <button type="submit" class="btn btn-primary">Subscribe</button>
+        <button type="submit" class="btn btn-primary">subscribe</button>
       </form>
       <div class="form-message"></div>
     </section>
@@ -59,7 +142,7 @@
 
   <!-- ============ FOOTER ============ -->
   <footer>
-    <p>&copy; 2024 Khang Le. All rights reserved. | <a href="about.html">About</a> | <a href="projects.html">Projects</a></p>
+    <p>made with intention by khang le | 2024</p>
   </footer>
 
   <!-- ============ SCRIPTS ============ -->
