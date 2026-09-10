@@ -1,0 +1,26 @@
+# Experimental versions
+*-funky*.html
+*-funky*.css
+*-redesigned.*
+*-image-heavy.*
+intro-update.css
+main-redesigned.css
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+
+# Environment
+.env
+.env.local

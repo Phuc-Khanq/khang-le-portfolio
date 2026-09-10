@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>khang le</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:ital@0;1&family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- ============ INTRO / SPLASH SCREEN ============ -->
+  <div class="intro-overlay" id="introOverlay">
+    <div class="intro-content">
+      <h1>khang le</h1>
+    </div>
+  </div>
+
+  <!-- ============ FLOATING NAVIGATION ============ -->
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">main</a></li>
+        <li><a href="about.html">i'm...</a></li>
+        <li><a href="projects.html">my...</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main>
+    <!-- ============ HERO SECTION ============ -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>i make music that <em>feels</em></h1>
+        <p class="subtitle">indie hip hop. moody.</p>
+        <p>atmospheric, introspective, authentic.</p>
+
+        <div class="cta-buttons">
+          <button class="btn btn-primary" onclick="document.getElementById('work').scrollIntoView({behavior: 'smooth'})">
+            listen
+          </button>
+          <button class="btn btn-secondary" onclick="document.getElementById('newsletter').scrollIntoView({behavior: 'smooth'})">
+            updates
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURED WORKS ============ -->
+    <section id="work">
+      <h2>recent work</h2>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <div class="project-card">
+          <div class="project-image">🎵</div>
+          <div class="project-content">
+            <div>
+              <p class="project-date">coming soon</p>
+              <h3>untitled</h3>
+            </div>
+            <a href="#">listen</a>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card">
+          <div class="project-image">🎵</div>
+          <div class="project-content">
+            <div>
+              <p class="project-date">in dev</p>
+              <h3>first release</h3>
+            </div>
+            <a href="#">coming</a>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card">
+          <div class="project-image">🎵</div>
+          <div class="project-content">
+            <div>
+              <p class="project-date">upcoming</p>
+              <h3>love & sadness</h3>
+            </div>
+            <a href="#">soon</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: var(--spacing-xl);">
+        <a href="projects.html" class="btn btn-secondary">all work →</a>
+      </div>
+    </section>
+
+    <!-- ============ NEWSLETTER SECTION ============ -->
+    <section class="newsletter-section" id="newsletter">
+      <h2>follow</h2>
+      <p>new music updates</p>
+      <form class="newsletter-form" method="POST">
+        <input
+          type="email"
+          placeholder="email"
+          required
+        >
+        <button type="submit" class="btn btn-primary">subscribe</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <p>made with intention | khang le | 2024</p>
+  </footer>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    // Intro splash screen fade out
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const intro = document.getElementById('introOverlay');
+        intro.classList.add('fade-out');
+      }, 3000);
+    });
+
+    // Scroll blur effect
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        } else {
+          entry.target.classList.remove('in-view');
+        }
+      });
+    }, observerOptions);
+
+    // Apply scroll blur to project cards and sections
+    document.querySelectorAll('.project-card, section').forEach(el => {
+      el.classList.add('scroll-blur');
+      observer.observe(el);
+    });
+
+    // Enhanced parallax scroll effect
+    window.addEventListener('scroll', function() {
+      const scrollPos = window.scrollY;
+      const heroSection = document.querySelector('.hero');
+      if (heroSection) {
+        heroSection.style.transform = `translateY(${scrollPos * 0.5}px)`;
+      }
+
+      // Add subtle blur to elements based on scroll speed
+      document.querySelectorAll('.project-card').forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const blur = Math.abs(rect.top - window.innerHeight / 2) / 100;
+        card.style.filter = `blur(${Math.max(0, Math.min(blur, 3))}px)`;
+      });
+    });
+
+    // Newsletter form handler
+    document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('button');
+      btn.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        btn.style.transform = 'scale(1)';
+        alert('thanks!');
+        this.reset();
+      }, 100);
+    });
+
+    // Button click ripple effect
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.style.position = 'absolute';
+        ripple.style.width = '20px';
+        ripple.style.height = '20px';
+        ripple.style.background = 'rgba(255,255,255,0.6)';
+        ripple.style.borderRadius = '50%';
+        ripple.style.pointerEvents = 'none';
+        ripple.style.animation = 'ripple-out 0.6s ease-out';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+  </script>
+
+  <style>
+    @keyframes ripple-out {
+      from {
+        transform: scale(0);
+        opacity: 1;
+      }
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+</body>
+</html>

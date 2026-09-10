@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor Test</title>
+  <style>
+    body {
+      background: #0f0f0f;
+      color: #efefef;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 40px;
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .test-section {
+      margin-bottom: 60px;
+      padding: 20px;
+      background: #1a1a1a;
+      border-radius: 8px;
+    }
+
+    p {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    a {
+      color: #d946ef;
+      text-decoration: underline;
+    }
+
+    button {
+      background: #d946ef;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #2979f0;
+    }
+
+    code {
+      background: #000;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    /* Test different cursor methods */
+    .cursor-svg {
+      cursor: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M 8 6 C 8 6 6 10 6 16 C 6 22 8 26 14 26 C 18 26 22 24 24 20" fill="none" stroke="%23d946ef" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="16" r="1" fill="%23d946ef"/></svg>') 16 16, auto;
+    }
+
+    .cursor-pointer {
+      cursor: pointer;
+    }
+
+    .cursor-default {
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Cursor Test Page</h1>
+
+  <div class="test-section cursor-svg">
+    <h2>SVG Cursor Test (Full Page)</h2>
+    <p>This entire section should show the Claude logo cursor when you move your mouse here.</p>
+    <p>If you don't see a custom cursor, there may be a browser compatibility issue.</p>
+    <button onclick="alert('Button clicked!')">Click Me (Test)</button>
+  </div>
+
+  <div class="test-section cursor-pointer">
+    <h2>Standard Pointer Cursor (for comparison)</h2>
+    <p>This section uses the standard pointer cursor so you can compare.</p>
+    <button onclick="alert('This uses standard pointer cursor')">Standard Button</button>
+  </div>
+
+  <div class="test-section cursor-default">
+    <h2>Default Cursor (for comparison)</h2>
+    <p>This section uses the default arrow cursor.</p>
+  </div>
+
+  <div class="test-section cursor-svg">
+    <h2>Troubleshooting</h2>
+    <p><strong>If you don't see a custom cursor:</strong></p>
+    <ul>
+      <li>Check your browser console for any errors (F12 → Console)</li>
+      <li>Some browsers may not support data URI cursors</li>
+      <li>Try refreshing the page (Ctrl+Shift+R or Cmd+Shift+R)</li>
+      <li>Try a different browser (Chrome, Firefox, Safari, Edge all support this)</li>
+    </ul>
+
+    <h3>Expected Behavior:</h3>
+    <p>When you move your cursor over the purple-tinted sections, you should see a stylized "C" logo cursor (purple color) instead of the normal arrow.</p>
+
+    <h3>SVG Cursor Code:</h3>
+    <code style="display: block; padding: 10px; margin: 10px 0; overflow-x: auto;">
+cursor: url('data:image/svg+xml;charset=utf-8,...') 16 16, auto;
+    </code>
+  </div>
+
+  <script>
+    console.log('Cursor test page loaded');
+    console.log('SVG cursor should be visible when moving mouse over purple sections');
+  </script>
+</body>
+</html>

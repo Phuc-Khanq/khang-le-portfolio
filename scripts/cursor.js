@@ -19,7 +19,8 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Elements that should make the ring swell.
-  var HOVER_SELECTOR = 'a, button, [role="button"], .project-card, .btn, label, summary';
+  var HOVER_SELECTOR =
+    'a, button, [role="button"], .tile, .still, .contact, label, summary';
   // Elements that should turn the ring into a text bar.
   var TEXT_SELECTOR = 'input, textarea, [contenteditable="true"]';
 

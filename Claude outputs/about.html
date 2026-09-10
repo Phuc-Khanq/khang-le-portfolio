@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>about | khang le</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:ital@0;1&family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- ============ FLOATING NAVIGATION ============ -->
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">main</a></li>
+        <li><a href="about.html">i'm...</a></li>
+        <li><a href="projects.html">my...</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main>
+    <!-- ---- About Section ---- -->
+    <section>
+      <h2>who i am</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <h3>the story</h3>
+          <p>musician & producer. hip hop, indie, experimental.</p>
+          <p><em>vietnamese roots.</em> moody, atmospheric, introspective.</p>
+          <p>i engineer, produce, write, and rap. <strong>every sound has purpose.</strong></p>
+        </div>
+
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <strong>artist & songwriter</strong>
+            <p>vulnerability & emotion</p>
+          </div>
+          <div class="highlight-item">
+            <strong>producer & engineer</strong>
+            <p>moody beats & atmosphere</p>
+          </div>
+          <div class="highlight-item">
+            <strong>rapper & vocalist</strong>
+            <p>stories through song</p>
+          </div>
+          <div class="highlight-item">
+            <strong>indie first</strong>
+            <p>vision over commercial</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---- Creative Philosophy ---- -->
+    <section>
+      <h2>how i work</h2>
+      <div style="max-width: 600px; margin: 0 auto;">
+        <p><em>authenticity over perfection.</em> real emotion, real experience.</p>
+        <p>every project starts with a feeling. <strong>details become atmosphere.</strong></p>
+        <p><em>open to collaborations</em> with artists & producers who understand vision.</p>
+      </div>
+    </section>
+
+    <!-- ---- Current Status ---- -->
+    <section>
+      <h2>current status</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-image">🎵</div>
+          <div class="project-content">
+            <h3>building debut</h3>
+            <a href="#">in progress</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-image">🎵</div>
+          <div class="project-content">
+            <h3>collaborations</h3>
+            <a href="#">let's work</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-image">🎵</div>
+          <div class="project-content">
+            <h3>always creating</h3>
+            <a href="#">follow</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NEWSLETTER SECTION ============ -->
+    <section class="newsletter-section" id="newsletter">
+      <h2>follow</h2>
+      <p>new music updates</p>
+      <form class="newsletter-form" method="POST">
+        <input
+          type="email"
+          placeholder="email"
+          required
+        >
+        <button type="submit" class="btn btn-primary">subscribe</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <p>made with intention | khang le | <a href="index.html">home</a> | <a href="projects.html">work</a></p>
+  </footer>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    // Force Claude logo cursor to always be visible - no system pointer
+    const claudeCursor = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 32 32\'%3E%3Cpath d=\'M24 6 C24 6 28 10 28 16 C28 22 24 26 18 26 C12 26 8 22 8 16 C8 10 12 6 18 6\' fill=\'none\' stroke=\'%23d946ef\' stroke-width=\'3\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E") 16 16, auto';
+
+    // Apply to all elements on load
+    document.addEventListener('DOMContentLoaded', () => {
+      document.documentElement.style.cursor = claudeCursor + ' !important';
+    });
+
+    // Override any cursor changes
+    document.addEventListener('mouseover', (e) => {
+      e.target.style.cursor = claudeCursor + ' !important';
+    }, true);
+
+    document.addEventListener('mousedown', (e) => {
+      e.target.style.cursor = claudeCursor + ' !important';
+    }, true);
+
+    // Newsletter form handler
+    document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('thanks!');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
