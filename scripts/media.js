@@ -1,0 +1,26 @@
+/* Generated from art/manifest.json — do not hand-edit.
+   Inlined rather than fetched so the site also works from file://. */
+window.KLMedia = {
+  base: 'art/',
+  images: {
+    'dsc9303': { w: 6016, h: 2560, ratio: 2.35, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAADQAwCdASoYAAoAPu1iqU2ppaQiMAgBMB2JZACdMoADTpk74usttgAA/uXLkeXftfzXEEJO+Rq9lAcI5rgqH6u6NflhyoIc6sZ0cHKQcU+FJKAA' },
+    'dsc9525': { w: 6016, h: 3384, ratio: 1.7778, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAwCdASoYAA0APu1iqU2ppaQiMAgBMB2JZwC/OCHgBXGe8pM8zoN4AP7ynzmHG+2MjqR67BqE8C1laLn6n2YB9iJWJ5vafJDYvl4Z5MVdHWsNJJfTtiDk5Owy/sElA9mw0SMz9Xh/MSrpZ3+kwAAA' },
+    'dsc9586': { w: 6016, h: 3384, ratio: 1.7778, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAABQAwCdASoYAA0APu1iqU2ppaOiMAgBMB2JYwCdACHfwn8rAAD+8PKJgpP3P+kvYQg+A2yJ53OcC401bNjZSXYBU4XZqkLoAAA=' },
+    'dsc9592': { w: 6016, h: 2560, ratio: 2.35, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADQAwCdASoYAAoAPu1iqU2ppaQiMAgBMB2JQBOmUABp2iWcc12/6AAA/uRM3oSKfpCcHxZYPbYcu7s/ewQESWnTVwAAAA==' },
+    'dsc9601': { w: 6016, h: 3384, ratio: 1.7778, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAACQAwCdASoYAA0APu1iqk2ppaQiMAgBMB2JYgCdAB5GXv/0mwSAAP67T9gSJyUP8YzHPCRgN4DcJRBlSji2WoTTXDYCYm65cVf4QLcd4AA=' },
+    'dsc9662': { w: 6016, h: 4016, ratio: 1.498, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAAAwBACdASoYABAAPu1kqU2ppaQiMAgBMB2JYwDBzCHf4/RDXebyUpwpWoAA/vKX3bARiR9jeNaeLhcTATvnVr126JOof0IG2lfiJOVa/yMwt05QaI7H405n2euDk8uCkVfWNEEFxl+oXoGYo0mwTxfH+zKnPViYuZ7d9bN0AAA=' },
+    'dsc9664': { w: 6016, h: 3384, ratio: 1.7778, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAABQAwCdASoYAA0APu1iqU2ppaOiMAgBMB2JZwAAW+uMCh5cAAD+8pg6yvkPBtPpKWelkIf/6NDAn2wMs8scDcXiz76oT6xttwAAAA==' },
+    'dsc9671': { w: 6016, h: 4016, ratio: 1.498, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRpoAAABXRUJQVlA4II4AAADwAwCdASoYABAAPu1kqU2ppaOiMAgBMB2JQBdgBDwCPnqDsIi4vr5AAP7yoHMme0C3FM6tKcziv3YKXKZgqrdpkqbWJvqVm9VTWt9CEWxPL26/3pQRniFWdPsGNSZOvxH2E2kg5MAlAn+LcPY8kUG7uEIdi59YZKtDGu/7SW4enRwd89Fh75Y/PByyAAAA' },
+    'dsc9679': { w: 4016, h: 6016, ratio: 0.6676, orient: 'portrait', lqip: 'data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAACQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZgCdMoAloEo4fQ8t+OdNtV6F3WAA/voOm9PeL5Io2rKKnGdJVjdMTO/HIPw5LMv0NUV5PBmklZ9Rbh3Ssf6i7n9YDZAuWg0dOQw9yW6VOI9SbubJ0/+BNNNlTplbudE1PHDnaOLSWHbCEXhtDEWbBFx6dkYUeczQeot812q0isYZ3v0rs14gELW0k1AA' },
+    'dsc9695': { w: 3174, h: 4232, ratio: 0.75, orient: 'portrait', lqip: 'data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAwBACdASoSABgAPtlepE2oJaO1N/qoAqAbCWkAAHuIhzDnug2fhhUGgQAA/vEPcHYrnVese2D5QKdEBKPa2Y30phppAAAA' },
+    'dsc9717': { w: 4016, h: 6016, ratio: 0.6676, orient: 'portrait', lqip: 'data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAAAQBACdASoQABgAPu1iqU2ppaOiMAgBMB2JZwDG9CHfyFf6yPCn989NMAD+8pZZ+XhoiE9JgeUp8cYLEtvrXjIXQGmTXNw0Yy82j6mOBwh9yDcHjrSmowMGmQuZ8ruP1SEkzUw0/ImR7uM+2n65zCOAAAA=' },
+    'dsc9721': { w: 6016, h: 4016, ratio: 1.498, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAADQAwCdASoYABAAPu1iqk2ppaQiMAgBMB2JZQAAQxiXaRpzouW5FIAA/vKzS+y0tSKKq0jwHxyKhjDOtTBAnVa/BAN5cFCqX0bpjBFjPUFtE/Nyg/v21/lYZzZLFvQC1RlW9kptFsCW9b1OBBTj9kgAAAA=' },
+    'dsc9930': { w: 2501, h: 3335, ratio: 0.7499, orient: 'portrait', lqip: 'data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAABwBQCdASoSABgAPu1mpU2ppaMiMBgMATAdiWkAAC51n9Ko/ycNTuPMA5366k8sHZ5jRRtgAP7ymmb0pDQNuQ80w9mThe72UR7AxNBUPjcW77QRi/9gGaIpeG4W9dQOBd9K7jgMYy95ra1zI7uuc2j9qnHDwJ6YAAA=' },
+    'dsc9971': { w: 3342, h: 5007, ratio: 0.6675, orient: 'portrait', lqip: 'data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAwCdASoQABgAPu1oqk6ppiQiMAgBMB2JaQAAUqpsiy6oki//MUIAAP70Msol9/MjSU1JXYzey/X0uhbkcZ5FNr5ocgeRS1KSsMZ5+UON3XKPuXtWHB8TDR1hDLXrIJ0S7bjzW5jIEySj/voWAAAA' },
+    'dsc9972': { w: 5054, h: 3374, ratio: 1.4979, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAAAwAwCdASoYABAAPu1kq04ppaQiMAgBMB2JaQAAW+i2c3QAAP7w1q7rcZlCa/W7QHrxuTxhrQLG0+/vNpyQTqPMAAA=' },
+    'dsc9973': { w: 5054, h: 3374, ratio: 1.4979, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAACwAwCdASoYABAAPu1iqU2ppaQiMAgBMB2JaQAAW+kddS2hKbvlCAD+8NVfa53X9XEqD3BiKhcT4hz6QJtqK23WYR3YAAAA' },
+    'dsc9975': { w: 3374, h: 5054, ratio: 0.6676, orient: 'portrait', lqip: 'data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAADQAwCdASoQABgAPu1iqU2ppaQiMAgBMB2JaQAAUmMK4wEPrhZI2gAA/olE6m4CA5923KjkOWb91/18JGuwnaJG0wedYo7A/Yq8pcP0M8mDcDor0mxIMxVAnl36b4gM+NbPGttAAAA=' },
+    'dsc9976': { w: 5054, h: 3374, ratio: 1.4979, orient: 'landscape', lqip: 'data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAACwAwCdASoYABAAPu1iqU2ppaOiMAgBMB2JaQAAVEhAhDuMOU2PAAD81IQPwX3I0+Gwd4MV7jak+PXypJGdtLo3hDK8rPuvoJzp7bXeFTvWnntZY6wq2LlOqvQ1rVyxVWTd07bizZUhAAAA' },
+    'haz1026': { w: 4000, h: 6000, ratio: 0.6667, orient: 'portrait', lqip: 'data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JZwABHus/cs6SQJgbGJ4AAP78Q/Xx5v+n/tLFCK8umZxX0GaGUhZYC/q//S8+D9+N/uEzY13ygTpQmkr4jPmpDBcaMKqQDOu2HJanqWx6Rfawz6f6gAAA' },
+  }
+};

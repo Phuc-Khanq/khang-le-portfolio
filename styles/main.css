@@ -308,8 +308,20 @@ html, body, *, *::before, *::after { cursor: none !important; }
   border: 1px solid var(--line);
 }
 
+/* The 24px placeholder is painted as the container's background and
+   blown up — it sits under the real file until that decodes. */
+.tile__art,
+.still__art,
+.project__art,
+.lightbox__stage {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .tile__art .art,
-.project__art .art {
+.project__art .art,
+.still__art .art {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -519,9 +531,10 @@ html, body, *, *::before, *::after { cursor: none !important; }
    ============================================================ */
 .stills__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: clamp(1rem, 2.5vw, 2rem);
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: clamp(1rem, 2.5vw, 2.2rem);
   padding: 0 var(--pad);
+  align-items: start;
 }
 
 .still {
@@ -532,20 +545,18 @@ html, body, *, *::before, *::after { cursor: none !important; }
   color: inherit;
 }
 
+/* Landscape frames sit wide, portraits sit tall — the gallery keeps the
+   shape each frame was actually shot in instead of cropping everything
+   to one ratio. */
 .still__art {
   display: block;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--line);
 }
 
-.still__art .art {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 1s var(--ease), transform 0.7s var(--ease);
-}
+.still--tall .still__art { aspect-ratio: 4 / 5; }
 
 .still:hover .still__art .art { transform: scale(1.05); }
 
@@ -580,13 +591,26 @@ html, body, *, *::before, *::after { cursor: none !important; }
 .lightbox.is-open { opacity: 1; visibility: visible; }
 
 .lightbox__stage {
-  max-width: min(78vw, 780px);
-  max-height: 72vh;
+  display: flex;
+  max-width: min(92vw, 1200px);
+  max-height: 76vh;
   overflow: hidden;
   border: 1px solid var(--line);
 }
 
-.lightbox__stage .art { width: 100%; height: auto; opacity: 1; }
+.lightbox__stage.is-tall { max-width: min(70vw, 620px); }
+
+.lightbox__stage .art {
+  width: auto;
+  max-width: 100%;
+  max-height: 76vh;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+
+.lightbox__stage .art.is-in { opacity: 1; }
+.lightbox__stage canvas.art { opacity: 1; width: 100%; height: auto; }
 
 .lightbox__caption {
   font-family: var(--ui);

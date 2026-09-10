@@ -30,21 +30,27 @@ window.KLGL = (function () {
     'precision mediump float;',
     'uniform sampler2D uTex;',
     'uniform vec2  uMouse;',
+    'uniform vec2  uCover;',
     'uniform float uTime;',
     'uniform float uHover;',
     'varying vec2 vUv;',
     'void main() {',
+    // Work in quad space so the ripple stays circular regardless of
+    // how the photo is cropped.
     '  vec2 uv = vUv;',
     '  vec2 d = uv - uMouse;',
     '  float dist = length(d);',
     // ring travelling out from the pointer, dying off with distance
     '  float ripple = sin(dist * 22.0 - uTime * 3.2) * exp(-dist * 5.0) * 0.028 * uHover;',
     '  uv += normalize(d + vec2(0.0001)) * ripple;',
+    // Then map into texture space with a cover fit — centre-crop the
+    // overflowing axis instead of squashing the photo.
+    '  vec2 tuv = (uv - 0.5) * uCover + 0.5;',
     // pull the channels apart very slightly, strongest near the pointer
-    '  float ca = 0.005 * uHover * exp(-dist * 3.0);',
-    '  float r = texture2D(uTex, uv + vec2(ca, 0.0)).r;',
-    '  float g = texture2D(uTex, uv).g;',
-    '  float b = texture2D(uTex, uv - vec2(ca, 0.0)).b;',
+    '  float ca = 0.005 * uHover * exp(-dist * 3.0) * uCover.x;',
+    '  float r = texture2D(uTex, tuv + vec2(ca, 0.0)).r;',
+    '  float g = texture2D(uTex, tuv).g;',
+    '  float b = texture2D(uTex, tuv - vec2(ca, 0.0)).b;',
     // lift a touch on hover so the hovered tile reads as active
     '  vec3 col = vec3(r, g, b) * (1.0 + 0.14 * uHover);',
     '  gl_FragColor = vec4(col, 1.0);',
@@ -62,6 +68,7 @@ window.KLGL = (function () {
   var mouse = { x: 0.5, y: 0.5 };
   var hover = 0;             // eased 0..1
   var targetHover = 0;
+  var srcAspect = 1;         // natural aspect of the current texture
   var start = performance.now();
 
   function compile(type, src) {
@@ -118,6 +125,7 @@ window.KLGL = (function () {
 
     uni.tex = gl.getUniformLocation(prog, 'uTex');
     uni.mouse = gl.getUniformLocation(prog, 'uMouse');
+    uni.cover = gl.getUniformLocation(prog, 'uCover');
     uni.time = gl.getUniformLocation(prog, 'uTime');
     uni.hover = gl.getUniformLocation(prog, 'uHover');
 
@@ -148,16 +156,38 @@ window.KLGL = (function () {
     if (canvas) canvas.classList.remove('is-on');
   }
 
-  /** Take over a tile. `source` is the canvas holding its artwork. */
+  /**
+   * Take over a tile.
+   * `source` is a canvas (generated art) or a loaded <img> (a photo).
+   */
   function attach(el, source) {
     if (!ok || !el || !source) return;
 
+    // An <img> that hasn't decoded yet would upload as a blank texture.
+    if (source.tagName === 'IMG' && !source.complete) return;
+
+    var sw = source.naturalWidth || source.width;
+    var sh = source.naturalHeight || source.height;
+    if (!sw || !sh) return;
+
     activeEl = el;
+    srcAspect = sw / sh;
     targetHover = 1;
 
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, source);
+
+    try {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, source);
+    } catch (e) {
+      // Opening the site straight off disk (file://) makes every image a
+      // cross-origin read, which taints the texture and throws here. Served
+      // over http — locally or on Pages — this never fires. Give up once
+      // rather than retrying on every hover; the CSS hover still carries it.
+      ok = false;
+      detach();
+      return;
+    }
 
     canvas.classList.add('is-on');
   }
@@ -197,8 +227,15 @@ window.KLGL = (function () {
         canvas.height = h * dpr;
       }
 
+      // Cover fit: crop whichever axis overflows, never squash.
+      var quadAspect = w / h;
+      var cx = 1, cy = 1;
+      if (srcAspect > quadAspect) cx = quadAspect / srcAspect;
+      else cy = srcAspect / quadAspect;
+
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.uniform2f(uni.mouse, mouse.x, mouse.y);
+      gl.uniform2f(uni.cover, cx, cy);
       gl.uniform1f(uni.time, (performance.now() - start) / 1000);
       gl.uniform1f(uni.hover, hover);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);

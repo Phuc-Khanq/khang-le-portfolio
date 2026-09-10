@@ -12,33 +12,63 @@
   // ---------------------------------------------------------------
   // Content. Edit here — the views read from this.
   // ---------------------------------------------------------------
+  // `img` is an id in scripts/media.js. Drop the field and the tile
+  // falls back to generated artwork.
   var PROJECTS = [
     { slug: 'untitled',        title: 'untitled',        status: 'coming soon',  year: '2026', role: 'write · produce · mix',
+      img: 'dsc9303',
       note: 'The one that started as a voice memo at 3am and refused to leave.' },
     { slug: 'first-release',   title: 'first release',   status: 'in dev',       year: '2026', role: 'write · produce · engineer',
+      img: 'haz1026',
       note: 'Everything before this was practice. This is the line in the sand.' },
     { slug: 'love-and-sadness',title: 'love & sadness',  status: 'upcoming',     year: '2026', role: 'write · vocals · produce',
+      img: 'dsc9525',
       note: 'Two things that never showed up separately.' },
     { slug: 'night-sessions',  title: 'night sessions',  status: 'in progress',  year: '2026', role: 'produce · engineer',
+      img: 'dsc9662',
       note: 'Made entirely between midnight and the point where it stops being night.' },
     { slug: 'working-together',title: 'working together',status: 'collab',       year: '2026', role: 'feature · production',
+      img: 'dsc9664',
       note: 'Open door. Bring something honest.' },
     { slug: 'whats-next',      title: "what's next",     status: 'always',       year: '2026', role: 'write · produce',
+      img: 'dsc9586',
       note: 'A placeholder that keeps refusing to stay one.' },
     { slug: 'deep-cuts',       title: 'deep cuts',       status: 'recording',    year: '2026', role: 'write · vocals',
+      img: 'dsc9717',
       note: 'The songs that did not fit anywhere, which is usually the tell.' },
     { slug: 'soul-beats',      title: 'soul beats',      status: 'mixing',       year: '2026', role: 'produce · mix',
+      img: 'dsc9679',
       note: 'Sample-led, warm, deliberately unhurried.' },
     { slug: 'abstract-sounds', title: 'abstract sounds', status: 'experimental', year: '2026', role: 'sound design',
+      img: 'dsc9930',
       note: 'Texture first, song second. Sometimes song never.' },
     { slug: 'new-era',         title: 'new era',         status: 'upcoming',     year: '2027', role: 'write · produce · engineer',
+      img: 'dsc9601',
       note: 'Naming it early so there is something to live up to.' }
   ];
 
+  // The shoot, in narrative order rather than filename order.
+  // Captions are placeholders — rename them to whatever they are.
   var STILLS = [
-    'room tone', 'monitor glow', 'take 41', 'the long walk back',
-    'blue hour', 'cable spaghetti', 'first pressing', 'nothing yet',
-    'hands', 'the drive home', 'soundcheck', 'after'
+    { img: 'dsc9303', cap: 'blue hour' },
+    { img: 'dsc9592', cap: 'long exposure' },
+    { img: 'dsc9601', cap: 'last light' },
+    { img: 'dsc9586', cap: 'running' },
+    { img: 'dsc9525', cap: 'in the surf' },
+    { img: 'dsc9664', cap: 'city behind' },
+    { img: 'dsc9662', cap: 'the parapet' },
+    { img: 'dsc9671', cap: 'folded' },
+    { img: 'dsc9679', cap: 'red tile' },
+    { img: 'dsc9695', cap: 'one light' },
+    { img: 'dsc9717', cap: 'close' },
+    { img: 'dsc9721', cap: 'hands' },
+    { img: 'dsc9930', cap: 'blur' },
+    { img: 'dsc9971', cap: 'streetlight' },
+    { img: 'dsc9972', cap: 'the grass' },
+    { img: 'dsc9973', cap: 'field' },
+    { img: 'dsc9975', cap: 'the corner' },
+    { img: 'dsc9976', cap: 'against the wall' },
+    { img: 'haz1026', cap: 'back to the water' }
   ];
 
   // ---------------------------------------------------------------
@@ -66,7 +96,10 @@
   function viewHome() {
     var tiles = PROJECTS.map(function (p, i) {
       return [
-        '<a class="tile reveal" href="#/project/' + p.slug + '" data-art="' + esc(p.title) + '" style="--i:' + i + '">',
+        '<a class="tile reveal" href="#/project/' + p.slug + '"',
+        '   data-art="' + esc(p.title) + '"',
+        '   data-img="' + esc(p.img || '') + '"',
+        '   data-alt="' + esc(p.title) + ' — cover" style="--i:' + i + '">',
         '  <span class="tile__index">' + String(i + 1).padStart(2, '0') + '</span>',
         '  <span class="tile__art"></span>',
         '  <span class="tile__meta">',
@@ -117,7 +150,9 @@
       '    <h1 class="project__title reveal">' + esc(p.title) + '</h1>',
       '  </header>',
 
-      '  <div class="project__art reveal" data-art="' + esc(p.title) + '"></div>',
+      '  <div class="project__art reveal" data-art="' + esc(p.title) + '"' +
+         ' data-img="' + esc(p.img || '') + '" data-size="lg"' +
+         ' data-alt="' + esc(p.title) + '"></div>',
 
       '  <div class="project__body">',
       '    <p class="project__note reveal">' + esc(p.note) + '</p>',
@@ -144,18 +179,24 @@
   }
 
   function viewStills() {
-    var items = STILLS.map(function (name, i) {
+    var items = STILLS.map(function (s, i) {
+      var m = window.KLMedia && window.KLMedia.images[s.img];
+      var tall = m && m.orient === 'portrait' ? ' still--tall' : '';
       return [
-        '<button class="still reveal" type="button" data-art="' + esc(name) + '" data-name="' + esc(name) + '" style="--i:' + i + '">',
+        '<button class="still reveal' + tall + '" type="button"',
+        '        data-art="' + esc(s.cap) + '"',
+        '        data-img="' + esc(s.img) + '"',
+        '        data-alt="' + esc(s.cap) + '"',
+        '        data-name="' + esc(s.cap) + '" style="--i:' + (i % 6) + '">',
         '  <span class="still__art"></span>',
-        '  <span class="still__label">' + esc(name) + '</span>',
+        '  <span class="still__label">' + esc(s.cap) + '</span>',
         '</button>'
       ].join('');
     }).join('');
 
     return [
       '<section class="stills">',
-      '  <header class="sec-head reveal"><h2>stills</h2><span>tap one</span></header>',
+      '  <header class="sec-head reveal"><h2>stills</h2><span>' + STILLS.length + ' frames &middot; tap one</span></header>',
       '  <div class="stills__grid">' + items + '</div>',
       '</section>'
     ].join('');
@@ -257,19 +298,50 @@
     var holders = app.querySelectorAll('[data-art]');
     if (!holders.length) return;
 
+    // No photo for this one — fall back to generated artwork.
+    var generated = function (host, target) {
+      var art = window.KLArt.make(host.dataset.art, 700);
+      art.className = 'art';
+      target.appendChild(art);
+      host._art = art;
+      requestAnimationFrame(function () { art.classList.add('is-in'); });
+    };
+
     var build = function (host) {
       if (host.dataset.artDone) return;
       host.dataset.artDone = '1';
 
       var target = host.querySelector('.tile__art, .still__art') || host;
-      var art = window.KLArt.make(host.dataset.art, 700);
-      art.className = 'art';
-      target.appendChild(art);
-      host._art = art;
+      var id = host.dataset.img;
+      var media = window.KLMedia && id ? window.KLMedia.images[id] : null;
 
-      requestAnimationFrame(function () {
-        art.classList.add('is-in');
-      });
+      if (!media) {
+        generated(host, target);
+        return;
+      }
+
+      // Blurred 24px placeholder sits behind until the real file lands,
+      // so the tile is never an empty rectangle.
+      target.style.backgroundImage = 'url("' + media.lqip + '")';
+
+      var img = new Image();
+      img.className = 'art';
+      img.alt = host.dataset.alt || '';
+      img.decoding = 'async';
+
+      img.onload = function () {
+        host._art = img;              // WebGL samples this
+        img.classList.add('is-in');
+      };
+
+      img.onerror = function () {
+        img.remove();
+        target.style.backgroundImage = '';
+        generated(host, target);      // missing file shouldn't leave a hole
+      };
+
+      img.src = window.KLMedia.base + (host.dataset.size || 'sm') + '/' + id + '.webp';
+      target.appendChild(img);
     };
 
     if (!('IntersectionObserver' in window)) {
@@ -346,10 +418,27 @@
 
     Array.prototype.forEach.call(stills, function (btn) {
       btn.addEventListener('click', function () {
+        var id = btn.dataset.img;
+        var media = window.KLMedia && id ? window.KLMedia.images[id] : null;
+
         stage.innerHTML = '';
-        var art = window.KLArt.make(btn.dataset.name, 1000);
-        art.className = 'art is-in';
-        stage.appendChild(art);
+        stage.classList.toggle('is-tall', !!media && media.orient === 'portrait');
+
+        if (media) {
+          stage.style.backgroundImage = 'url("' + media.lqip + '")';
+          var img = new Image();
+          img.className = 'art';
+          img.alt = btn.dataset.name || '';
+          img.onload = function () { img.classList.add('is-in'); };
+          img.src = window.KLMedia.base + 'lg/' + id + '.webp';
+          stage.appendChild(img);
+        } else {
+          stage.style.backgroundImage = '';
+          var art = window.KLArt.make(btn.dataset.name, 1000);
+          art.className = 'art is-in';
+          stage.appendChild(art);
+        }
+
         cap.textContent = btn.dataset.name;
         box.classList.add('is-open');
         box.setAttribute('aria-hidden', 'false');

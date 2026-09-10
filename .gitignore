@@ -1,29 +1,32 @@
-# OS Files
+# Experimental versions
+*-funky*.html
+*-funky*.css
+*-redesigned.*
+*-image-heavy.*
+intro-update.css
+main-redesigned.css
+
+# System files
 .DS_Store
 Thumbs.db
-
-# Editor Files
-.vscode/
-.idea/
 *.swp
 *.swo
 *~
 
-# Environment Files
-.env
-.env.local
-
-# Node Modules (if ever added)
+# Dependencies
 node_modules/
 package-lock.json
 
-# Build/Dist
+# Build outputs
 dist/
 build/
 
-# Logs
-*.log
+# Environment
+.env
+.env.local
 
-# Temporary Files
-*.tmp
-temp/
+# Camera originals — 169 MB, never belongs in the repo.
+# The web-sized derivatives in art/ are what the site serves.
+artwork/
+*.NEF
+*.RAW
