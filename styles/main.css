@@ -103,6 +103,73 @@ a, button, [role="button"], .tile, .still, label, summary, .contact {
 .kl-gl.is-on { opacity: 1; }
 
 /* ============================================================
+   INTRO
+   khangLE resolves into khxngLX, with only the two letters that
+   change carrying the accent.
+
+   The fade-out is a CSS animation, not a JS timer, so a script
+   error can never strand the overlay on top of the site. JS only
+   triggers the letter swap and handles an early skip.
+   ============================================================ */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  animation: intro-clear 0.8s var(--ease) 2.6s forwards;
+}
+
+@keyframes intro-clear {
+  to { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+/* early skip — cancel the animation, then settle to the same end state */
+.intro.is-done {
+  animation: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.45s ease, visibility 0.45s;
+}
+
+/* On skip the glyphs snap rather than roll. The roll is a 0.6s
+   transition and the fade-out is 0.45s, so without this the overlay
+   would clear while the letters were still mid-swap — you'd see the
+   word change halfway and then vanish. */
+.intro.is-done .g--swap i {
+  transition: none;
+}
+
+.intro__word {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 12vw, 8.5rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: intro-word 0.75s var(--ease) 0.1s forwards;
+}
+
+@keyframes intro-word {
+  to { opacity: 1; transform: none; }
+}
+
+/* the letters that change, in the accent — everything else stays text */
+.intro .g--swap { color: var(--accent); }
+
+/* nothing scrolls while the overlay is up */
+body.intro-open { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro { animation: none; opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+/* ============================================================
    CHROME — nav + footer
    ============================================================ */
 .top {

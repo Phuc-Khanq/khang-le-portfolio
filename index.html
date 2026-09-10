@@ -18,6 +18,20 @@
 </head>
 <body>
 
+  <!-- ============ INTRO ============
+       Static markup rather than JS-built, so it paints on the first
+       frame and the site never flashes behind it. Only the two letters
+       that change carry the accent colour. -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <p class="intro__word">
+      <span class="g">k</span><span class="g">h</span><span
+        class="g g--swap" style="--n:0"><i>a</i><i>x</i></span><span
+        class="g">n</span><span class="g">g</span><span
+        class="g">L</span><span
+        class="g g--swap" style="--n:1"><i>E</i><i>X</i></span>
+    </p>
+  </div>
+
   <!-- ============ FIXED CHROME ============ -->
   <header class="top">
     <a class="mark" href="#/" data-magnetic aria-label="khxngLX — home">khxngLX</a>

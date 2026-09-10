@@ -325,6 +325,60 @@
     mountName();
   }
 
+  // --- intro overlay ----------------------------------------------------
+  // khangLE resolves into khxngLX, then the overlay lifts. The fade-out
+  // itself is a CSS animation; this only fires the letter swap, allows an
+  // early skip, and tidies up afterwards.
+  var introRunning = false;
+
+  function mountIntro() {
+    var intro = document.getElementById('intro');
+    if (!intro) return;
+
+    if (reduceMotion) {
+      intro.remove();
+      return;
+    }
+
+    introRunning = true;
+    document.body.classList.add('intro-open');
+
+    var swapTimer = setTimeout(function () {
+      intro.classList.add('is-artist');
+    }, 1200);
+
+    var endTimer = null;
+    var done = false;
+    var events = ['click', 'keydown', 'wheel', 'touchstart'];
+
+    function finish() {
+      if (done) return;
+      done = true;
+      clearTimeout(swapTimer);
+      clearTimeout(endTimer);
+      events.forEach(function (t) { window.removeEventListener(t, skip); });
+      introRunning = false;
+      document.body.classList.remove('intro-open');
+      if (intro.parentNode) intro.parentNode.removeChild(intro);
+    }
+
+    function skip() {
+      if (done) return;
+      clearTimeout(swapTimer);
+      // land on the artist name rather than cutting away mid-word
+      intro.classList.add('is-artist');
+      intro.classList.add('is-done');
+      endTimer = setTimeout(finish, 480);
+    }
+
+    events.forEach(function (t) {
+      window.addEventListener(t, skip, { passive: true });
+    });
+
+    // CSS clears it at 2.6s + 0.8s; clean up just after
+    endTimer = setTimeout(finish, 3600);
+  }
+
   // --- wordmark: khang le → khxngLX ------------------------------------
   // Lands on the given name, then becomes the artist name. Hovering it
   // turns it back, so the given name is always one gesture away.
@@ -340,10 +394,18 @@
       if (alt) alt.classList.toggle('is-in', on);
     }
 
-    setTimeout(function () {
+    if (introRunning) {
+      // The intro is already telling this story. Don't run the same
+      // morph a second time behind the overlay — hold the finished
+      // state so the hero reads khxngLX the moment it lifts.
       settled = true;
       setArtist(true);
-    }, reduceMotion ? 0 : 1400);
+    } else {
+      setTimeout(function () {
+        settled = true;
+        setArtist(true);
+      }, reduceMotion ? 0 : 1400);
+    }
 
     if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
 
@@ -656,6 +718,7 @@
     var y = document.getElementById('year');
     if (y) y.textContent = new Date().getFullYear();
 
+    mountIntro();
     mountGL();
     render();
   }
