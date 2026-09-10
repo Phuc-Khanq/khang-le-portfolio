@@ -19,6 +19,11 @@
 
   --pad:  clamp(1.25rem, 5vw, 5.5rem);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Hover intensity — the two dials for every image hover on the site.
+     Set --hover-zoom to 1 and --hover-lift to 1 to switch it all off. */
+  --hover-zoom: 1.035;   /* how far a photo scales up   */
+  --hover-lift: 1.09;    /* how much it brightens       */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -66,6 +71,21 @@ html, body, *, *::before, *::after {
   cursor: image-set(
       url('../art/cursor.png') 1x,
       url('../art/cursor@2x.png') 2x) 16 16, auto !important;
+}
+
+/* Over anything you can act on, the heart swaps to a larger, warmer
+   one. A native cursor can't tween, but it can change — and this keeps
+   the zero-lag behaviour a follower element would have cost us.
+   The 32px heart is listed as the next candidate rather than `auto`,
+   so if a platform refuses the 40px bitmap it falls back to the normal
+   heart instead of snapping to an arrow. */
+a, button, [role="button"], .tile, .still, label, summary, .contact {
+  cursor: url('../art/cursor-active.png') 20 20,
+          url('../art/cursor.png') 16 16, auto !important;
+  cursor: image-set(
+      url('../art/cursor-active.png') 1x,
+      url('../art/cursor-active@2x.png') 2x) 20 20,
+      url('../art/cursor.png') 16 16, auto !important;
 }
 
 /* WebGL overlay that parks itself over the hovered tile */
@@ -361,13 +381,42 @@ html, body, *, *::before, *::after {
   object-fit: cover;
   opacity: 0;
   transform: scale(1.06);
-  transition: opacity 1.1s var(--ease), transform 1.4s var(--ease), filter 0.6s ease;
+  transition: opacity 1.1s var(--ease), transform 0.85s var(--ease), filter 0.45s ease;
 }
 
 .art.is-in { opacity: 1; transform: scale(1); }
 
-/* No zoom, dim, or distortion on hover — the frames sit still.
-   The hover cue lives in the caption instead. */
+/* ---- hover: the frame leans in and warms up -------------------------
+   Scale and brightness come from the two dials at the top of the file.
+   The faster timing is declared on the :hover rule, so it leans in
+   quickly and settles back on the slower base transition. */
+.tile:hover .tile__art .art,
+.still:hover .still__art .art {
+  transition: transform 0.7s var(--ease), filter 0.4s ease;
+  transform: scale(var(--hover-zoom));
+  filter: brightness(var(--hover-lift)) saturate(1.06);
+}
+
+/* the frame's edge picks up the accent */
+.tile__art,
+.still__art {
+  transition: border-color 0.45s ease;
+}
+
+.tile:hover .tile__art,
+.still:hover .still__art {
+  border-color: rgba(198, 164, 120, 0.55);
+}
+
+/* caption steps aside as the picture comes forward */
+.tile__meta {
+  transition: transform 0.55s var(--ease);
+}
+
+.tile:hover .tile__meta { transform: translateX(8px); }
+
+.still__label { transition: color 0.3s ease, transform 0.5s var(--ease); }
+.still:hover .still__label { transform: translateX(5px); }
 
 .tile__index {
   position: absolute;
@@ -745,6 +794,64 @@ html, body, *, *::before, *::after {
 .missing a { color: var(--accent); }
 
 /* ============================================================
+   HOVER: LINKS + BUTTONS
+   A rule wipes in from the left under any text link. It uses
+   currentColor rather than the accent directly — the nav sits in
+   a difference-blended bar, where a fixed colour would invert to
+   something unrelated.
+   ============================================================ */
+.top nav a,
+.pager a,
+.back,
+.foot a {
+  position: relative;
+}
+
+.top nav a::before,
+.pager a::before,
+.back::before,
+.foot a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s var(--ease);
+}
+
+.top nav a:hover::before,
+.pager a:hover::before,
+.back:hover::before,
+.foot a:hover::before {
+  transform: scaleX(1);
+}
+
+/* the next/prev pair wipe from the side they point toward */
+.pager__next::before { transform-origin: right center; }
+
+/* round buttons swell slightly as they fill */
+.player__btn,
+.lightbox__close {
+  transition:
+    background 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+    transform 0.35s var(--ease);
+}
+
+.player__btn:hover,
+.lightbox__close:hover { transform: scale(1.08); }
+
+.player__btn:active,
+.lightbox__close:active { transform: scale(0.96); }
+
+/* the email address grows its rule and warms through */
+.contact { transition: color 0.35s ease, border-color 0.35s ease, letter-spacing 0.5s var(--ease); }
+.contact:hover { letter-spacing: 0.012em; }
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 860px) {
@@ -772,4 +879,11 @@ html, body, *, *::before, *::after {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   .marquee__track { animation: none; }
   .reveal { opacity: 1; transform: none; }
+
+  /* Keep the brightness cue, drop the movement. */
+  :root { --hover-zoom: 1; }
+  .tile:hover .tile__meta,
+  .still:hover .still__label,
+  .player__btn:hover,
+  .lightbox__close:hover { transform: none; }
 }
