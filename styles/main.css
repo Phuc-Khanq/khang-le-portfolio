@@ -63,14 +63,16 @@ a { color: inherit; text-decoration: none; }
    keeping the cursor 32 CSS px (a bare url() to the @2x file
    would render it double size).
    ============================================================ */
+/* Hotspots are the image centre. The art is 460x399, so the cursor is
+   32x28 and 40x35 — not square, and the y hotspot is not half the x. */
 html, body, *, *::before, *::after {
-  cursor: url('../art/cursor.png') 16 16, auto !important;
+  cursor: url('../art/cursor.png') 16 14, auto !important;
   cursor: -webkit-image-set(
       url('../art/cursor.png') 1x,
-      url('../art/cursor@2x.png') 2x) 16 16, auto !important;
+      url('../art/cursor@2x.png') 2x) 16 14, auto !important;
   cursor: image-set(
       url('../art/cursor.png') 1x,
-      url('../art/cursor@2x.png') 2x) 16 16, auto !important;
+      url('../art/cursor@2x.png') 2x) 16 14, auto !important;
 }
 
 /* Over anything you can act on, the heart swaps to a larger, warmer
@@ -80,12 +82,12 @@ html, body, *, *::before, *::after {
    so if a platform refuses the 40px bitmap it falls back to the normal
    heart instead of snapping to an arrow. */
 a, button, [role="button"], .tile, .still, label, summary, .contact {
-  cursor: url('../art/cursor-active.png') 20 20,
-          url('../art/cursor.png') 16 16, auto !important;
+  cursor: url('../art/cursor-active.png') 20 17,
+          url('../art/cursor.png') 16 14, auto !important;
   cursor: image-set(
       url('../art/cursor-active.png') 1x,
-      url('../art/cursor-active@2x.png') 2x) 20 20,
-      url('../art/cursor.png') 16 16, auto !important;
+      url('../art/cursor-active@2x.png') 2x) 20 17,
+      url('../art/cursor.png') 16 14, auto !important;
 }
 
 /* WebGL overlay that parks itself over the hovered tile */
