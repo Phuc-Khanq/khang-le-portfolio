@@ -139,11 +139,11 @@
     return [
       '<section class="hero">',
       '  <p class="hero__eyebrow reveal">artist · producer · engineer</p>',
-      '  <h1 class="hero__title reveal" id="wordmark" aria-label="khxngLX — khang le">',
+      '  <h1 class="hero__title reveal" id="wordmark" aria-label="khxngLX — khang LE">',
       '    <span class="ln" aria-hidden="true">' + glyphs('khang', 'khxng') + '</span>',
-      '    <span class="ln ln--outline" aria-hidden="true">' + glyphs('le', 'LX') + '</span>',
+      '    <span class="ln ln--outline" aria-hidden="true">' + glyphs('LE', 'LX') + '</span>',
       '  </h1>',
-      '  <p class="hero__alt" aria-hidden="true">khang le</p>',
+      '  <p class="hero__alt" aria-hidden="true">khang LE</p>',
       '  <p class="hero__line reveal">Moody, atmospheric, introspective. Vietnamese roots. Every sound has a purpose.</p>',
       '  <canvas class="wave" aria-hidden="true"></canvas>',
       '</section>',
@@ -347,12 +347,24 @@
 
     if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
 
-    mark.addEventListener('mouseenter', function () {
-      if (settled) setArtist(false);
-    });
+    // Listen on the two lines, not the h1 — the h1 spans the full page
+    // width, so hovering it would fire with the pointer far from the
+    // letters. Each .ln is width:max-content, so its box is the text.
+    // A counter keeps the state steady while moving between the lines,
+    // where leave on one fires before enter on the other.
+    var lines = mark.querySelectorAll('.ln');
+    var inside = 0;
 
-    mark.addEventListener('mouseleave', function () {
-      if (settled) setArtist(true);
+    Array.prototype.forEach.call(lines, function (ln) {
+      ln.addEventListener('mouseenter', function () {
+        inside++;
+        if (settled) setArtist(false);
+      });
+
+      ln.addEventListener('mouseleave', function () {
+        inside = Math.max(0, inside - 1);
+        if (settled && inside === 0) setArtist(true);
+      });
     });
   }
 
