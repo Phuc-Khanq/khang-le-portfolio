@@ -598,6 +598,11 @@
 
     var ctx = cv.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    // Pull the accent from the stylesheet so the wave follows the palette
+    // instead of carrying its own copy of the colour.
+    var rootStyle = getComputedStyle(document.documentElement);
+    var accent = (rootStyle.getPropertyValue('--accent-rgb') || '255,77,92').trim();
     var w = 0, h = 0;
     var energy = 0;
     var lastY = window.scrollY;
@@ -644,7 +649,7 @@
           else ctx.lineTo(x, py);
         }
         ctx.strokeStyle = pass
-          ? 'rgba(198,164,120,' + (0.14 + energy * 0.2) + ')'
+          ? 'rgba(' + accent + ',' + (0.16 + energy * 0.24) + ')'
           : 'rgba(233,230,224,' + (0.20 + energy * 0.35) + ')';
         ctx.lineWidth = pass ? 1 : 1.2;
         ctx.stroke();
