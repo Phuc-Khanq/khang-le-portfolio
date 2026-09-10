@@ -77,10 +77,36 @@
   var app = null;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // WebGL ripple on tile hover. Off — the photographs read better still.
+  // Flip to true to bring it back; scripts/gl.js is still loaded.
+  var ENABLE_GL = false;
+
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
+  }
+
+  // "khang" -> "khxng" and "le" -> "LX" line up letter for letter, so the
+  // changed glyphs can roll over in place without the line reflowing.
+  // Each swap slot is an inline-grid: both glyphs share one cell, so the
+  // cell takes the wider of the two and nothing shifts mid-animation.
+  function glyphs(from, to) {
+    var out = '';
+    var n = 0;
+    for (var i = 0; i < from.length; i++) {
+      var a = from.charAt(i);
+      var b = to.charAt(i);
+      if (a === b) {
+        out += '<span class="g">' + esc(a) + '</span>';
+      } else {
+        out +=
+          '<span class="g g--swap" style="--n:' + n++ + '">' +
+          '<i>' + esc(a) + '</i><i>' + esc(b) + '</i>' +
+          '</span>';
+      }
+    }
+    return out;
   }
 
   function findProject(slug) {
@@ -113,7 +139,11 @@
     return [
       '<section class="hero">',
       '  <p class="hero__eyebrow reveal">artist · producer · engineer</p>',
-      '  <h1 class="hero__title reveal">khang<span>le</span></h1>',
+      '  <h1 class="hero__title reveal" id="wordmark" aria-label="khxngLX — khang le">',
+      '    <span class="ln" aria-hidden="true">' + glyphs('khang', 'khxng') + '</span>',
+      '    <span class="ln ln--outline" aria-hidden="true">' + glyphs('le', 'LX') + '</span>',
+      '  </h1>',
+      '  <p class="hero__alt" aria-hidden="true">khang le</p>',
       '  <p class="hero__line reveal">Moody, atmospheric, introspective. Vietnamese roots. Every sound has a purpose.</p>',
       '  <canvas class="wave" aria-hidden="true"></canvas>',
       '</section>',
@@ -206,6 +236,7 @@
     return [
       '<section class="about">',
       '  <h1 class="about__title reveal">i&rsquo;m khang</h1>',
+      '  <p class="about__handle reveal">releasing as <b>khxngLX</b></p>',
       '  <div class="about__cols">',
       '    <div class="about__text">',
       '      <p class="reveal">Musician and producer working in hip hop, indie and whatever sits between them.</p>',
@@ -291,6 +322,38 @@
     mountLightbox();
     mountWave();
     mountPlayer();
+    mountName();
+  }
+
+  // --- wordmark: khang le → khxngLX ------------------------------------
+  // Lands on the given name, then becomes the artist name. Hovering it
+  // turns it back, so the given name is always one gesture away.
+  function mountName() {
+    var mark = app.querySelector('#wordmark');
+    if (!mark) return;
+
+    var alt = app.querySelector('.hero__alt');
+    var settled = false;
+
+    function setArtist(on) {
+      mark.classList.toggle('is-artist', on);
+      if (alt) alt.classList.toggle('is-in', on);
+    }
+
+    setTimeout(function () {
+      settled = true;
+      setArtist(true);
+    }, reduceMotion ? 0 : 1400);
+
+    if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+
+    mark.addEventListener('mouseenter', function () {
+      if (settled) setArtist(false);
+    });
+
+    mark.addEventListener('mouseleave', function () {
+      if (settled) setArtist(true);
+    });
   }
 
   // --- artwork, generated only when it comes into view --------------
@@ -536,8 +599,9 @@
   // Tile hover → WebGL
   // ---------------------------------------------------------------
   function mountGL() {
+    if (!ENABLE_GL) return;
     if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
-    if (!window.KLGL.init()) return;
+    if (!window.KLGL || !window.KLGL.init()) return;
 
     document.addEventListener('mouseover', function (e) {
       var tile = e.target.closest && e.target.closest('.tile, .project__art');

@@ -210,12 +210,56 @@ html, body, *, *::before, *::after { cursor: none !important; }
   letter-spacing: -0.035em;
 }
 
-.hero__title span {
-  display: block;
+.ln { display: block; }
+
+.ln--outline {
   padding-left: 0.12em;
   color: transparent;
   -webkit-text-stroke: 1px var(--muted);
+  transition: -webkit-text-stroke-color 0.6s ease;
 }
+
+.is-artist .ln--outline { -webkit-text-stroke-color: var(--accent); }
+
+.g { display: inline-block; }
+
+/* Both glyphs share one grid cell, so the slot is as wide as the wider
+   of the two — 'X' is much wider than 'e', and this stops the line
+   jumping as they trade places. */
+.g--swap {
+  display: inline-grid;
+  justify-items: center;
+  vertical-align: top;
+}
+
+.g--swap i {
+  grid-area: 1 / 1;
+  font-style: normal;
+  transition:
+    transform 0.6s var(--ease),
+    opacity 0.6s var(--ease);
+  transition-delay: calc(var(--n, 0) * 80ms);
+}
+
+.g--swap i:last-child { transform: translateY(0.38em); opacity: 0; }
+
+.is-artist .g--swap i:first-child { transform: translateY(-0.38em); opacity: 0; }
+.is-artist .g--swap i:last-child  { transform: translateY(0);       opacity: 1; }
+
+/* The given name settles in underneath once the wordmark has changed. */
+.hero__alt {
+  font-family: var(--ui);
+  font-size: 0.74rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-top: clamp(0.9rem, 2vw, 1.5rem);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.7s var(--ease) 0.35s, transform 0.7s var(--ease) 0.35s;
+}
+
+.hero__alt.is-in { opacity: 1; transform: none; }
 
 .hero__line {
   max-width: 34ch;
@@ -332,7 +376,8 @@ html, body, *, *::before, *::after { cursor: none !important; }
 
 .art.is-in { opacity: 1; transform: scale(1); }
 
-.tile:hover .tile__art .art { transform: scale(1.04); filter: brightness(0.82); }
+/* No zoom, dim, or distortion on hover — the frames sit still.
+   The hover cue lives in the caption instead. */
 
 .tile__index {
   position: absolute;
@@ -558,8 +603,6 @@ html, body, *, *::before, *::after { cursor: none !important; }
 
 .still--tall .still__art { aspect-ratio: 4 / 5; }
 
-.still:hover .still__art .art { transform: scale(1.05); }
-
 .still__label {
   display: block;
   padding-top: 0.8rem;
@@ -648,6 +691,18 @@ html, body, *, *::before, *::after { cursor: none !important; }
   letter-spacing: -0.03em;
   margin-bottom: clamp(2.5rem, 7vw, 5rem);
 }
+
+.about__handle {
+  font-family: var(--ui);
+  font-size: 0.74rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-top: clamp(-2rem, -4vw, -1.2rem);
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.about__handle b { color: var(--accent); font-weight: 500; }
 
 .about__cols {
   display: grid;
