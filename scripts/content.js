@@ -238,6 +238,7 @@ window.KLContent = {
   },
   "resume": {
     "label": "resume",
+    "expandable": true,
     "sections": [
       {
         "title": "releases",
@@ -247,19 +248,19 @@ window.KLContent = {
         "title": "roles",
         "entries": [
           {
-            "period": "",
             "title": "artist & songwriter",
-            "detail": "writing, topline, vocals"
+            "subtitle": "writing, topline, vocals",
+            "detail": "hip hop, indie, experimental"
           },
           {
-            "period": "",
             "title": "producer",
-            "detail": "beats, arrangement, sound design"
+            "subtitle": "beats, arrangement, sound design",
+            "detail": "sample-led, atmospheric"
           },
           {
-            "period": "",
             "title": "engineer",
-            "detail": "recording, editing, mixing"
+            "subtitle": "recording, editing, mixing",
+            "detail": "self-engineered throughout"
           }
         ]
       },
@@ -269,17 +270,20 @@ window.KLContent = {
           {
             "period": "TODO years",
             "title": "University of Florida",
-            "detail": "TODO degree / major"
+            "subtitle": "TODO degree",
+            "detail": "TODO major or focus"
           }
         ]
       },
       {
         "title": "live",
+        "text": "Delete this section until there's something in it.",
         "entries": [
           {
             "period": "TODO year",
             "title": "TODO venue or event",
-            "detail": "TODO city"
+            "subtitle": "TODO city",
+            "detail": ""
           }
         ]
       }

@@ -166,9 +166,10 @@
     ]
   },
 
-  "_resume": "Click-to-expand on the About page. A section with \"from\": \"projects\" builds itself from your projects list, so you never type a release twice. Anything marked TODO is a placeholder I could not fill in for you — the build warns until you replace it. Delete any section you don't want.",
+  "_resume": "On the About page. Each entry has four optional fields: period (left column), title, subtitle (sits under the title), and detail (right column). Leave any of them out and that part is simply omitted. A section can also carry \"text\" for a line of prose under its heading. A section with \"from\": \"projects\" builds itself from your projects list, so you never type a release twice. Set \"expandable\" to false to have the resume always open instead of behind a button. Anything marked TODO is a placeholder I could not fill in for you — the build warns until you replace it.",
   "resume": {
     "label": "resume",
+    "expandable": true,
     "sections": [
       {
         "title": "releases",
@@ -177,21 +178,44 @@
       {
         "title": "roles",
         "entries": [
-          { "period": "", "title": "artist & songwriter", "detail": "writing, topline, vocals" },
-          { "period": "", "title": "producer", "detail": "beats, arrangement, sound design" },
-          { "period": "", "title": "engineer", "detail": "recording, editing, mixing" }
+          {
+            "title": "artist & songwriter",
+            "subtitle": "writing, topline, vocals",
+            "detail": "hip hop, indie, experimental"
+          },
+          {
+            "title": "producer",
+            "subtitle": "beats, arrangement, sound design",
+            "detail": "sample-led, atmospheric"
+          },
+          {
+            "title": "engineer",
+            "subtitle": "recording, editing, mixing",
+            "detail": "self-engineered throughout"
+          }
         ]
       },
       {
         "title": "education",
         "entries": [
-          { "period": "TODO years", "title": "University of Florida", "detail": "TODO degree / major" }
+          {
+            "period": "TODO years",
+            "title": "University of Florida",
+            "subtitle": "TODO degree",
+            "detail": "TODO major or focus"
+          }
         ]
       },
       {
         "title": "live",
+        "text": "Delete this section until there's something in it.",
         "entries": [
-          { "period": "TODO year", "title": "TODO venue or event", "detail": "TODO city" }
+          {
+            "period": "TODO year",
+            "title": "TODO venue or event",
+            "subtitle": "TODO city",
+            "detail": ""
+          }
         ]
       }
     ]

@@ -251,18 +251,30 @@
   // --- resume ------------------------------------------------------------
   // A section with "from": "projects" builds itself from the projects list,
   // so a release never has to be typed in two places.
+  // Four fields per entry, all optional: period sits in the left column,
+  // subtitle tucks under the title, detail runs down the right.
   function resumeRows(section) {
     var entries = section.from === 'projects'
       ? PROJECTS.map(function (p) {
-          return { period: p.year || '', title: p.title || '', detail: p.role || '' };
+          return {
+            period: p.year || '',
+            title: p.title || '',
+            subtitle: p.status || '',
+            detail: p.role || ''
+          };
         })
       : (section.entries || []);
 
     return entries.map(function (e) {
+      var main = '<span class="cv__title">' + esc(e.title || '') + '</span>';
+      if (e.subtitle) {
+        main += '<span class="cv__subtitle">' + esc(e.subtitle) + '</span>';
+      }
+
       return [
         '<li class="cv__row">',
         '<span class="cv__period">' + esc(e.period || '') + '</span>',
-        '<span class="cv__title">' + esc(e.title || '') + '</span>',
+        '<span class="cv__main">' + main + '</span>',
         '<span class="cv__detail">' + esc(e.detail || '') + '</span>',
         '</li>'
       ].join('');
@@ -277,12 +289,23 @@
       return [
         '<div class="cv__group">',
         '<h3 class="cv__heading">' + esc(s.title || '') + '</h3>',
+        s.text ? '<p class="cv__text">' + esc(s.text) + '</p>' : '',
         '<ul class="cv__list">' + rows + '</ul>',
         '</div>'
       ].join('');
     }).join('');
 
     if (!sections) return '';
+
+    // expandable: false leaves it open, with no button at all
+    if (cv.expandable === false) {
+      return [
+        '<div class="resume resume--open reveal">',
+        '  <h2 class="resume__label resume__label--static">' + esc(cv.label || 'resume') + '</h2>',
+        '  <div class="resume__inner">' + sections + '</div>',
+        '</div>'
+      ].join('');
+    }
 
     return [
       '<div class="resume reveal">',
