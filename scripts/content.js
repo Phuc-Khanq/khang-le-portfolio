@@ -6,7 +6,7 @@ window.KLContent = {
     "givenName": "khang LE",
     "tagline": "artist, producer, engineer",
     "description": "khxngLX — Khang Le. Musician and producer. Hip hop, indie, experimental. Moody, atmospheric, introspective.",
-    "email": "hello@khangle.com",
+    "email": "khang.le@ufl.edu",
     "footerNote": "made with intention"
   },
   "intro": {
