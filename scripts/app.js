@@ -12,64 +12,18 @@
   // ---------------------------------------------------------------
   // Content. Edit here — the views read from this.
   // ---------------------------------------------------------------
-  // `img` is an id in scripts/media.js. Drop the field and the tile
-  // falls back to generated artwork.
-  var PROJECTS = [
-    { slug: 'untitled',        title: 'untitled',        status: 'coming soon',  year: '2026', role: 'write · produce · mix',
-      img: 'dsc9303',
-      note: 'The one that started as a voice memo at 3am and refused to leave.' },
-    { slug: 'first-release',   title: 'first release',   status: 'in dev',       year: '2026', role: 'write · produce · engineer',
-      img: 'haz1026',
-      note: 'Everything before this was practice. This is the line in the sand.' },
-    { slug: 'love-and-sadness',title: 'love & sadness',  status: 'upcoming',     year: '2026', role: 'write · vocals · produce',
-      img: 'dsc9525',
-      note: 'Two things that never showed up separately.' },
-    { slug: 'night-sessions',  title: 'night sessions',  status: 'in progress',  year: '2026', role: 'produce · engineer',
-      img: 'dsc9662',
-      note: 'Made entirely between midnight and the point where it stops being night.' },
-    { slug: 'working-together',title: 'working together',status: 'collab',       year: '2026', role: 'feature · production',
-      img: 'dsc9664',
-      note: 'Open door. Bring something honest.' },
-    { slug: 'whats-next',      title: "what's next",     status: 'always',       year: '2026', role: 'write · produce',
-      img: 'dsc9586',
-      note: 'A placeholder that keeps refusing to stay one.' },
-    { slug: 'deep-cuts',       title: 'deep cuts',       status: 'recording',    year: '2026', role: 'write · vocals',
-      img: 'dsc9717',
-      note: 'The songs that did not fit anywhere, which is usually the tell.' },
-    { slug: 'soul-beats',      title: 'soul beats',      status: 'mixing',       year: '2026', role: 'produce · mix',
-      img: 'dsc9679',
-      note: 'Sample-led, warm, deliberately unhurried.' },
-    { slug: 'abstract-sounds', title: 'abstract sounds', status: 'experimental', year: '2026', role: 'sound design',
-      img: 'dsc9930',
-      note: 'Texture first, song second. Sometimes song never.' },
-    { slug: 'new-era',         title: 'new era',         status: 'upcoming',     year: '2027', role: 'write · produce · engineer',
-      img: 'dsc9601',
-      note: 'Naming it early so there is something to live up to.' }
-  ];
+  // Everything below comes from content.json, via scripts/content.js
+  // which the build generates. To change any of it: edit content.json
+  // and run `npm run build`. Nothing here needs touching.
+  // ---------------------------------------------------------------
+  var C = window.KLContent || {};
+  var SITE = C.site || {};
+  var HERO = C.hero || {};
+  var ABOUT = C.about || {};
+  var PROJECTS = Array.isArray(C.projects) ? C.projects : [];
+  var STILLS = Array.isArray(C.stills) ? C.stills : [];
+  var MARQUEE = Array.isArray(C.marquee) ? C.marquee : [];
 
-  // The shoot, in narrative order rather than filename order.
-  // Captions are placeholders — rename them to whatever they are.
-  var STILLS = [
-    { img: 'dsc9303', cap: 'blue hour' },
-    { img: 'dsc9592', cap: 'long exposure' },
-    { img: 'dsc9601', cap: 'last light' },
-    { img: 'dsc9586', cap: 'running' },
-    { img: 'dsc9525', cap: 'in the surf' },
-    { img: 'dsc9664', cap: 'city behind' },
-    { img: 'dsc9662', cap: 'the parapet' },
-    { img: 'dsc9671', cap: 'folded' },
-    { img: 'dsc9679', cap: 'red tile' },
-    { img: 'dsc9695', cap: 'one light' },
-    { img: 'dsc9717', cap: 'close' },
-    { img: 'dsc9721', cap: 'hands' },
-    { img: 'dsc9930', cap: 'blur' },
-    { img: 'dsc9971', cap: 'streetlight' },
-    { img: 'dsc9972', cap: 'the grass' },
-    { img: 'dsc9973', cap: 'field' },
-    { img: 'dsc9975', cap: 'the corner' },
-    { img: 'dsc9976', cap: 'against the wall' },
-    { img: 'haz1026', cap: 'back to the water' }
-  ];
 
   // ---------------------------------------------------------------
   // Utilities
@@ -136,28 +90,36 @@
       ].join('');
     }).join('');
 
+    var l1 = HERO.lineOne || { from: '', to: '' };
+    var l2 = HERO.lineTwo || { from: '', to: '' };
+
+    // One group of words, repeated. The track slides by -50%, so the
+    // content has to repeat evenly for the loop to be seamless.
+    var group = MARQUEE.map(function (word) {
+      return '<span>' + esc(word) + '</span><span>&middot;</span>';
+    }).join('');
+    var track = group + group + group + group;
+
     return [
       '<section class="hero">',
-      '  <p class="hero__eyebrow reveal">artist · producer · engineer</p>',
-      '  <h1 class="hero__title reveal" id="wordmark" aria-label="khxngLX — khang LE">',
-      '    <span class="ln" aria-hidden="true">' + glyphs('khang', 'khxng') + '</span>',
-      '    <span class="ln ln--outline" aria-hidden="true">' + glyphs('LE', 'LX') + '</span>',
+      '  <p class="hero__eyebrow reveal">' + esc(HERO.eyebrow || '') + '</p>',
+      '  <h1 class="hero__title reveal" id="wordmark" aria-label="' +
+           esc((SITE.artistName || '') + ' — ' + (SITE.givenName || '')) + '">',
+      '    <span class="ln" aria-hidden="true">' + glyphs(l1.from, l1.to) + '</span>',
+      '    <span class="ln ln--outline" aria-hidden="true">' + glyphs(l2.from, l2.to) + '</span>',
       '  </h1>',
-      '  <p class="hero__alt" aria-hidden="true">khang LE</p>',
-      '  <p class="hero__line reveal">Moody, atmospheric, introspective. Vietnamese roots. Every sound has a purpose.</p>',
+      '  <p class="hero__alt" aria-hidden="true">' + esc(SITE.givenName || '') + '</p>',
+      '  <p class="hero__line reveal">' + esc(HERO.statement || '') + '</p>',
       '  <canvas class="wave" aria-hidden="true"></canvas>',
       '</section>',
 
       '<div class="marquee" aria-hidden="true"><div class="marquee__track">',
-      new Array(4).join(''),
-      '<span>hip hop</span><span>&middot;</span><span>indie</span><span>&middot;</span><span>experimental</span><span>&middot;</span>',
-      '<span>hip hop</span><span>&middot;</span><span>indie</span><span>&middot;</span><span>experimental</span><span>&middot;</span>',
-      '<span>hip hop</span><span>&middot;</span><span>indie</span><span>&middot;</span><span>experimental</span><span>&middot;</span>',
-      '<span>hip hop</span><span>&middot;</span><span>indie</span><span>&middot;</span><span>experimental</span><span>&middot;</span>',
+      track,
       '</div></div>',
 
       '<section class="work">',
-      '  <header class="sec-head reveal"><h2>work</h2><span>' + PROJECTS.length + ' pieces</span></header>',
+      '  <header class="sec-head reveal"><h2>work</h2><span>' + PROJECTS.length +
+         (PROJECTS.length === 1 ? ' piece' : ' pieces') + '</span></header>',
       '  <div class="grid">' + tiles + '</div>',
       '</section>'
     ].join('');
@@ -233,25 +195,29 @@
   }
 
   function viewAbout() {
+    var paras = (ABOUT.paragraphs || []).map(function (t) {
+      return '<p class="reveal">' + esc(t) + '</p>';
+    }).join('');
+
+    var items = (ABOUT.highlights || []).map(function (h) {
+      return '<li class="reveal"><b>' + esc(h.label || '') + '</b>' +
+             '<span>' + esc(h.note || '') + '</span></li>';
+    }).join('');
+
+    var email = SITE.email || '';
+
     return [
       '<section class="about">',
-      '  <h1 class="about__title reveal">i&rsquo;m khang</h1>',
-      '  <p class="about__handle reveal">releasing as <b>khxngLX</b></p>',
+      '  <h1 class="about__title reveal">' + esc(ABOUT.title || '') + '</h1>',
+      '  <p class="about__handle reveal">' + esc(ABOUT.handleLine || '') +
+         ' <b>' + esc(SITE.artistName || '') + '</b></p>',
       '  <div class="about__cols">',
-      '    <div class="about__text">',
-      '      <p class="reveal">Musician and producer working in hip hop, indie and whatever sits between them.</p>',
-      '      <p class="reveal">Vietnamese roots. Moody, atmospheric, introspective &mdash; I engineer, produce, write and rap, and I would rather a track be honest than clean.</p>',
-      '      <p class="reveal">Authenticity over perfection. Every project starts with a feeling and the details turn into atmosphere.</p>',
-      '      <p class="reveal">Open to collaborations with artists and producers who understand the vision.</p>',
-      '    </div>',
-      '    <ul class="about__list">',
-      '      <li class="reveal"><b>artist &amp; songwriter</b><span>vulnerability &amp; emotion</span></li>',
-      '      <li class="reveal"><b>producer &amp; engineer</b><span>moody beats &amp; atmosphere</span></li>',
-      '      <li class="reveal"><b>rapper &amp; vocalist</b><span>stories through song</span></li>',
-      '      <li class="reveal"><b>indie first</b><span>vision over commercial</span></li>',
-      '    </ul>',
+      '    <div class="about__text">' + paras + '</div>',
+      '    <ul class="about__list">' + items + '</ul>',
       '  </div>',
-      '  <a class="contact reveal" href="mailto:hello@khangle.com">hello@khangle.com</a>',
+      email
+        ? '  <a class="contact reveal" href="mailto:' + esc(email) + '">' + esc(email) + '</a>'
+        : '',
       '</section>'
     ].join('');
   }

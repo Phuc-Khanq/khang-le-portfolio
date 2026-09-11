@@ -1,0 +1,18 @@
+{
+  "name": "khxnglx-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "khxngLX — portfolio site. Content lives in content.json; the build turns it and the photos in artwork/ into what the site loads.",
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/dev.mjs",
+    "build": "node tools/build.mjs",
+    "ship": "node tools/ship.mjs"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
