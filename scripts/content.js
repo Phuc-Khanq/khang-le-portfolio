@@ -12,7 +12,7 @@ window.KLContent = {
   },
   "links": [
     {
-      "label": "instagram",
+      "label": "dr.khxng",
       "url": "https://www.instagram.com/dr.khxng/"
     }
   ],

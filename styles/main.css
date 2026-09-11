@@ -882,12 +882,19 @@ body.intro-open { overflow: hidden; }
   margin-top: clamp(1.4rem, 3vw, 2.2rem);
 }
 
+/* Literal values — a handle, a number, an address — print as written.
+   The uppercase treatment is for labels, and a username in caps reads
+   as a different username. */
+.links a,
+.foot a {
+  text-transform: none;
+}
+
 .links a {
   position: relative;
   font-family: var(--ui);
   font-size: 0.76rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  letter-spacing: 0.14em;
   color: var(--muted);
   transition: color 0.3s ease;
 }
