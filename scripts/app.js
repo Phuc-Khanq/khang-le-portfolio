@@ -221,21 +221,91 @@
                esc(l.label || l.url) + '</a></li>');
     });
 
+    // Headshot goes through the same pipeline as everything else, so it
+    // gets the blurred placeholder and the fade-in for free.
+    var shot = ABOUT.headshot
+      ? '<div class="about__portrait reveal" data-art="portrait"' +
+        ' data-img="' + esc(ABOUT.headshot) + '" data-size="lg"' +
+        ' data-alt="' + esc(SITE.artistName || 'portrait') + '"></div>'
+      : '';
+
     return [
       '<section class="about">',
       '  <h1 class="about__title reveal">' + esc(ABOUT.title || '') + '</h1>',
       '  <p class="about__handle reveal">' + esc(ABOUT.handleLine || '') +
          ' <b>' + esc(SITE.artistName || '') + '</b></p>',
       '  <div class="about__cols">',
+      shot,
       '    <div class="about__text">' + paras + '</div>',
-      '    <ul class="about__list">' + items + '</ul>',
       '  </div>',
+      '  <ul class="about__list">' + items + '</ul>',
+      viewResume(),
       email
         ? '  <a class="contact reveal" href="mailto:' + esc(email) + '">' + esc(email) + '</a>'
         : '',
       row.length ? '  <ul class="links reveal">' + row.join('') + '</ul>' : '',
       '</section>'
     ].join('');
+  }
+
+  // --- resume ------------------------------------------------------------
+  // A section with "from": "projects" builds itself from the projects list,
+  // so a release never has to be typed in two places.
+  function resumeRows(section) {
+    var entries = section.from === 'projects'
+      ? PROJECTS.map(function (p) {
+          return { period: p.year || '', title: p.title || '', detail: p.role || '' };
+        })
+      : (section.entries || []);
+
+    return entries.map(function (e) {
+      return [
+        '<li class="cv__row">',
+        '<span class="cv__period">' + esc(e.period || '') + '</span>',
+        '<span class="cv__title">' + esc(e.title || '') + '</span>',
+        '<span class="cv__detail">' + esc(e.detail || '') + '</span>',
+        '</li>'
+      ].join('');
+    }).join('');
+  }
+
+  function viewResume() {
+    var cv = C.resume || {};
+    var sections = (cv.sections || []).map(function (s) {
+      var rows = resumeRows(s);
+      if (!rows) return '';
+      return [
+        '<div class="cv__group">',
+        '<h3 class="cv__heading">' + esc(s.title || '') + '</h3>',
+        '<ul class="cv__list">' + rows + '</ul>',
+        '</div>'
+      ].join('');
+    }).join('');
+
+    if (!sections) return '';
+
+    return [
+      '<div class="resume reveal">',
+      '  <button class="resume__toggle" type="button" aria-expanded="false" aria-controls="cv">',
+      '    <span class="resume__label">' + esc(cv.label || 'resume') + '</span>',
+      '    <span class="resume__sign" aria-hidden="true"></span>',
+      '  </button>',
+      '  <div class="resume__body" id="cv">',
+      '    <div class="resume__inner">' + sections + '</div>',
+      '  </div>',
+      '</div>'
+    ].join('');
+  }
+
+  function mountResume() {
+    var box = app.querySelector('.resume');
+    if (!box) return;
+
+    var btn = box.querySelector('.resume__toggle');
+    btn.addEventListener('click', function () {
+      var open = box.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
   }
 
   function viewMissing() {
@@ -305,6 +375,7 @@
     mountWave();
     mountPlayer();
     mountName();
+    mountResume();
   }
 
   // --- intro overlay ----------------------------------------------------

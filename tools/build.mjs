@@ -186,6 +186,27 @@ stills.forEach((s, i) => {
   noteRef(s.img, `${at} "${s.cap || '?'}"`);
 });
 
+// the About headshot goes through the same image pipeline
+if (content.about?.headshot) {
+  noteRef(content.about.headshot, 'about.headshot');
+}
+
+// Placeholders I couldn't fill in — nag until they're real.
+const todos = [];
+for (const s of (content.resume?.sections || [])) {
+  for (const e of (s.entries || [])) {
+    for (const [k, v] of Object.entries(e)) {
+      if (typeof v === 'string' && /\bTODO\b/.test(v)) {
+        todos.push(`resume "${s.title}" → ${k}: "${v}"`);
+      }
+    }
+  }
+}
+if (todos.length) {
+  warn(`${todos.length} resume placeholder${todos.length > 1 ? 's' : ''} still to fill in:`);
+  for (const t of todos) warn(`    ${t}`);
+}
+
 (content.links || []).forEach((l, i) => {
   const at = `links[${i}]`;
   if (!l || !l.url) {

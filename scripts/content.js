@@ -208,6 +208,7 @@ window.KLContent = {
     }
   ],
   "about": {
+    "headshot": "dsc9717",
     "title": "i'm khang",
     "handleLine": "releasing as",
     "paragraphs": [
@@ -232,6 +233,55 @@ window.KLContent = {
       {
         "label": "indie first",
         "note": "vision over commercial"
+      }
+    ]
+  },
+  "resume": {
+    "label": "resume",
+    "sections": [
+      {
+        "title": "releases",
+        "from": "projects"
+      },
+      {
+        "title": "roles",
+        "entries": [
+          {
+            "period": "",
+            "title": "artist & songwriter",
+            "detail": "writing, topline, vocals"
+          },
+          {
+            "period": "",
+            "title": "producer",
+            "detail": "beats, arrangement, sound design"
+          },
+          {
+            "period": "",
+            "title": "engineer",
+            "detail": "recording, editing, mixing"
+          }
+        ]
+      },
+      {
+        "title": "education",
+        "entries": [
+          {
+            "period": "TODO years",
+            "title": "University of Florida",
+            "detail": "TODO degree / major"
+          }
+        ]
+      },
+      {
+        "title": "live",
+        "entries": [
+          {
+            "period": "TODO year",
+            "title": "TODO venue or event",
+            "detail": "TODO city"
+          }
+        ]
       }
     ]
   }
