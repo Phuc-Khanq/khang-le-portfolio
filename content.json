@@ -7,8 +7,14 @@
     "tagline": "artist, producer, engineer",
     "description": "khxngLX — Khang Le. Musician and producer. Hip hop, indie, experimental. Moody, atmospheric, introspective.",
     "email": "khang.le@ufl.edu",
+    "phone": "+1 352 494 4349",
     "footerNote": "made with intention"
   },
+
+  "_links": "Anywhere you exist online. Add Spotify, SoundCloud, Apple Music, YouTube the same way — label, then url. Order here is order on the page. Delete any you don't want.",
+  "links": [
+    { "label": "instagram", "url": "https://www.instagram.com/dr.khxng/" }
+  ],
 
   "intro": {
     "_note": "The two words must be the same length. Letters that differ animate; letters that match stay put.",

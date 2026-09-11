@@ -7,8 +7,15 @@ window.KLContent = {
     "tagline": "artist, producer, engineer",
     "description": "khxngLX — Khang Le. Musician and producer. Hip hop, indie, experimental. Moody, atmospheric, introspective.",
     "email": "khang.le@ufl.edu",
+    "phone": "+1 352 494 4349",
     "footerNote": "made with intention"
   },
+  "links": [
+    {
+      "label": "instagram",
+      "url": "https://www.instagram.com/dr.khxng/"
+    }
+  ],
   "intro": {
     "from": "khangLE",
     "to": "khxngLX"

@@ -23,6 +23,7 @@
   var PROJECTS = Array.isArray(C.projects) ? C.projects : [];
   var STILLS = Array.isArray(C.stills) ? C.stills : [];
   var MARQUEE = Array.isArray(C.marquee) ? C.marquee : [];
+  var LINKS = Array.isArray(C.links) ? C.links : [];
 
 
   // ---------------------------------------------------------------
@@ -205,6 +206,20 @@
     }).join('');
 
     var email = SITE.email || '';
+    var phone = SITE.phone || '';
+
+    // tel: wants digits, so strip the spaces people read by
+    var tel = phone.replace(/[^\d+]/g, '');
+
+    var row = [];
+    if (phone) {
+      row.push('<li><a href="tel:' + esc(tel) + '">' + esc(phone) + '</a></li>');
+    }
+    LINKS.forEach(function (l) {
+      if (!l || !l.url) return;
+      row.push('<li><a href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer">' +
+               esc(l.label || l.url) + '</a></li>');
+    });
 
     return [
       '<section class="about">',
@@ -218,6 +233,7 @@
       email
         ? '  <a class="contact reveal" href="mailto:' + esc(email) + '">' + esc(email) + '</a>'
         : '',
+      row.length ? '  <ul class="links reveal">' + row.join('') + '</ul>' : '',
       '</section>'
     ].join('');
   }

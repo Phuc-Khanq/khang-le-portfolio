@@ -186,6 +186,17 @@ stills.forEach((s, i) => {
   noteRef(s.img, `${at} "${s.cap || '?'}"`);
 });
 
+(content.links || []).forEach((l, i) => {
+  const at = `links[${i}]`;
+  if (!l || !l.url) {
+    fail(at, 'missing "url"');
+  } else if (!/^https?:\/\//i.test(l.url)) {
+    fail(at, `"${l.url}" isn't a full web address`,
+         'It needs to start with https:// or the browser treats it as a page on your own site.');
+  }
+  if (l && !l.label) warn(`${at} has no label — the raw url will be shown instead.`);
+});
+
 // equal-length checks for the two morphing wordmarks
 const pairs = [
   ['intro', content.intro?.from, content.intro?.to],
@@ -370,14 +381,25 @@ const regions = {
 
   mark: `    <a class="mark" href="#/" data-magnetic aria-label="${esc(artist)} — home">${esc(artist)}</a>`,
 
-  foot: [
-    `    <span>${esc(site.footerNote || '')}</span>`,
-    site.email
-      ? `    <span><a href="mailto:${esc(site.email)}">${esc(site.email)}</a></span>`
-      : '    <span></span>',
-    `    <span>&copy; <span id="year">${new Date().getFullYear()}</span> ` +
-      `${esc(artist)}${given ? ' &middot; ' + esc(given) : ''}</span>`,
-  ].join('\n'),
+  foot: (() => {
+    const middle = [];
+    if (site.email) {
+      middle.push(`<a href="mailto:${esc(site.email)}">${esc(site.email)}</a>`);
+    }
+    for (const l of (content.links || [])) {
+      if (!l || !l.url) continue;
+      middle.push(
+        `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">` +
+        `${esc(l.label || l.url)}</a>`
+      );
+    }
+    return [
+      `    <span>${esc(site.footerNote || '')}</span>`,
+      `    <span>${middle.join(' &middot; ')}</span>`,
+      `    <span>&copy; <span id="year">${new Date().getFullYear()}</span> ` +
+        `${esc(artist)}${given ? ' &middot; ' + esc(given) : ''}</span>`,
+    ].join('\n');
+  })(),
 };
 
 const indexPath = path.join(ROOT, 'index.html');

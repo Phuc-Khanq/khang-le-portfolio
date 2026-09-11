@@ -873,6 +873,41 @@ body.intro-open { overflow: hidden; }
 
 .contact:hover { color: var(--accent); border-color: var(--accent); }
 
+/* phone + social, sitting under the email */
+.links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2rem;
+  margin-top: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.links a {
+  position: relative;
+  font-family: var(--ui);
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.3s ease;
+}
+
+.links a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s var(--ease);
+}
+
+.links a:hover { color: var(--accent); }
+.links a:hover::before { transform: scaleX(1); }
+
 .missing { padding: 6rem var(--pad); }
 .missing h1 { font-family: var(--display); font-size: clamp(2rem, 8vw, 5rem); margin-bottom: 1.5rem; }
 .missing a { color: var(--accent); }
