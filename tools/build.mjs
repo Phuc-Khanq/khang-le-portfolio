@@ -186,6 +186,35 @@ stills.forEach((s, i) => {
   noteRef(s.img, `${at} "${s.cap || '?'}"`);
 });
 
+// merch — categories have to line up with what the products claim
+const merch = content.merch;
+if (merch) {
+  const cats = Array.isArray(merch.categories) ? merch.categories : [];
+  if (!cats.length) {
+    fail('merch.categories', 'no categories', 'The filter bars come from this list.');
+  }
+  if (!merch.season) warn('merch has no "season" — the big type at the top will be blank.');
+
+  (merch.featured || []).forEach((p, i) => {
+    const at = `merch.featured[${i}]`;
+    if (!p.name) fail(at, 'missing "name"');
+    if (!p.category) {
+      fail(at, 'missing "category"', `One of: ${cats.join(', ')}`);
+    } else if (cats.length && !cats.includes(p.category)) {
+      fail(at, `category "${p.category}" isn't in merch.categories`,
+           `Add it to the list, or use one of: ${cats.join(', ')}. ` +
+           `A product in a category with no bar can never be filtered to.`);
+    }
+    noteRef(p.img, `${at} "${p.name || '?'}"`);
+  });
+
+  // a bar nobody can reach anything through is worth flagging, not failing
+  for (const cat of cats.slice(1)) {
+    const used = (merch.featured || []).some(p => p.category === cat);
+    if (!used) warn(`merch category "${cat}" has no products — its bar will show an empty grid.`);
+  }
+}
+
 // the About headshot goes through the same image pipeline
 if (content.about?.headshot) {
   noteRef(content.about.headshot, 'about.headshot');

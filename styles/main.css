@@ -1126,6 +1126,161 @@ body.intro-open { overflow: hidden; }
 .missing a { color: var(--accent); }
 
 /* ============================================================
+   MERCH
+   ============================================================ */
+.merch { padding: 0 var(--pad); }
+
+.merch__head { padding-bottom: clamp(1.5rem, 4vw, 2.5rem); }
+
+.merch__season {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(3rem, 14vw, 11rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  word-break: break-word;
+}
+
+.merch__note {
+  margin-top: clamp(1rem, 2.5vw, 1.6rem);
+  font-family: var(--ui);
+  font-size: 0.74rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ---- category bars ---- */
+.bars {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.bar {
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
+  padding: clamp(0.9rem, 2.2vw, 1.25rem) clamp(0.8rem, 2vw, 1.5rem);
+  background: none;
+  border: none;
+  border-right: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.bar:last-child { border-right: none; }
+.bar:hover { color: var(--accent); background: rgba(var(--accent-rgb), 0.05); }
+
+/* the accent rule that marks the active bar */
+.bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.4s var(--ease);
+}
+
+.bar.is-on { color: var(--text); }
+.bar.is-on::after { transform: scaleX(1); }
+
+/* ---- product grid ---- */
+.mgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(1.5rem, 3.5vw, 3rem);
+}
+
+.mitem { min-width: 0; }
+.mitem[hidden] { display: none; }
+
+.mitem__art {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  background-size: cover;
+  background-position: center;
+  transition: border-color 0.45s ease;
+}
+
+.mitem__art .art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1s var(--ease), transform 0.7s var(--ease), filter 0.4s ease;
+}
+
+.mitem__art .art.is-in { opacity: 1; transform: scale(1); }
+
+.mitem:hover .mitem__art { border-color: rgba(var(--accent-rgb), 0.55); }
+
+.mitem:hover .mitem__art .art {
+  transform: scale(var(--hover-zoom));
+  filter: brightness(var(--hover-lift)) saturate(1.06);
+}
+
+.mitem__meta { padding-top: 1rem; }
+
+.mitem__cat {
+  display: block;
+  font-family: var(--ui);
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.mitem__name {
+  margin-top: 0.45rem;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.05rem, 1.9vw, 1.35rem);
+  line-height: 1.25;
+  transition: color 0.35s ease;
+}
+
+.mitem:hover .mitem__name { color: var(--accent); }
+
+.mitem__spec {
+  margin-top: 0.3rem;
+  font-family: var(--ui);
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.mitem__status {
+  margin-top: 0.7rem;
+  font-family: var(--ui);
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.merch__empty {
+  padding: clamp(2.5rem, 6vw, 4rem) 0;
+  font-family: var(--ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* ============================================================
    HOVER: LINKS + BUTTONS
    A rule wipes in from the left under any text link. It uses
    currentColor rather than the accent directly — the nav sits in

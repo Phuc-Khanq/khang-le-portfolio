@@ -24,6 +24,7 @@
   var STILLS = Array.isArray(C.stills) ? C.stills : [];
   var MARQUEE = Array.isArray(C.marquee) ? C.marquee : [];
   var LINKS = Array.isArray(C.links) ? C.links : [];
+  var MERCH = C.merch || {};
 
 
   // ---------------------------------------------------------------
@@ -331,6 +332,84 @@
     });
   }
 
+  // --- merch -------------------------------------------------------------
+  function viewMerch() {
+    var cats = Array.isArray(MERCH.categories) ? MERCH.categories : [];
+    var items = Array.isArray(MERCH.featured) ? MERCH.featured : [];
+    var catchAll = cats[0] || 'all';
+
+    var bars = cats.map(function (cat, i) {
+      return '<button class="bar' + (i === 0 ? ' is-on' : '') + '" type="button"' +
+             ' data-cat="' + esc(cat) + '"' +
+             ' aria-pressed="' + (i === 0 ? 'true' : 'false') + '">' +
+             esc(cat) + '</button>';
+    }).join('');
+
+    var cards = items.map(function (p, i) {
+      return [
+        '<article class="mitem reveal" data-cat="' + esc(p.category || '') + '" style="--i:' + i + '">',
+        '  <div class="mitem__art" data-art="' + esc(p.name || 'merch') + '"',
+        '       data-img="' + esc(p.img || '') + '"',
+        '       data-alt="' + esc(p.name || '') + '"></div>',
+        '  <div class="mitem__meta">',
+        '    <span class="mitem__cat">' + esc(p.category || '') + '</span>',
+        '    <h3 class="mitem__name">' + esc(p.name || '') + '</h3>',
+        p.meta ? '    <p class="mitem__spec">' + esc(p.meta) + '</p>' : '',
+        p.status ? '    <p class="mitem__status">' + esc(p.status) + '</p>' : '',
+        '  </div>',
+        '</article>'
+      ].join('');
+    }).join('');
+
+    return [
+      '<section class="merch">',
+      '  <header class="merch__head">',
+      '    <h1 class="merch__season reveal">' + esc(MERCH.season || '') + '</h1>',
+      MERCH.note ? '    <p class="merch__note reveal">' + esc(MERCH.note) + '</p>' : '',
+      '  </header>',
+      cats.length
+        ? '  <nav class="bars reveal" aria-label="product categories" data-all="' +
+          esc(catchAll) + '">' + bars + '</nav>'
+        : '',
+      '  <header class="sec-head reveal"><h2>best sellers</h2><span>' +
+         items.length + (items.length === 1 ? ' piece' : ' pieces') + '</span></header>',
+      '  <div class="mgrid">' + cards + '</div>',
+      '  <p class="merch__empty" hidden>nothing here yet.</p>',
+      '</section>'
+    ].join('');
+  }
+
+  function mountMerch() {
+    var nav = app.querySelector('.bars');
+    if (!nav) return;
+
+    var catchAll = nav.dataset.all;
+    var bars = nav.querySelectorAll('.bar');
+    var items = app.querySelectorAll('.mitem');
+    var empty = app.querySelector('.merch__empty');
+
+    Array.prototype.forEach.call(bars, function (bar) {
+      bar.addEventListener('click', function () {
+        var cat = bar.dataset.cat;
+
+        Array.prototype.forEach.call(bars, function (b) {
+          var on = b === bar;
+          b.classList.toggle('is-on', on);
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+
+        var shown = 0;
+        Array.prototype.forEach.call(items, function (it) {
+          var match = cat === catchAll || it.dataset.cat === cat;
+          it.hidden = !match;
+          if (match) shown++;
+        });
+
+        if (empty) empty.hidden = shown > 0;
+      });
+    });
+  }
+
   function viewMissing() {
     return '<section class="missing"><h1>not here</h1><a href="#/">back to index</a></section>';
   }
@@ -347,6 +426,7 @@
       return { name: 'project', html: function () { return viewProject(parts[1]); } };
     }
     if (parts[0] === 'stills') return { name: 'stills', html: viewStills };
+    if (parts[0] === 'merch') return { name: 'merch', html: viewMerch };
     if (parts[0] === 'about') return { name: 'about', html: viewAbout };
     return { name: 'missing', html: viewMissing };
   }
@@ -399,6 +479,7 @@
     mountPlayer();
     mountName();
     mountResume();
+    mountMerch();
   }
 
   // --- intro overlay ----------------------------------------------------

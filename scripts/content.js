@@ -236,6 +236,44 @@ window.KLContent = {
       }
     ]
   },
+  "merch": {
+    "season": "gã ep.",
+    "note": "first drop — coming soon",
+    "categories": [
+      "all",
+      "cd",
+      "vinyl",
+      "poster",
+      "shirts",
+      "bag"
+    ],
+    "featured": [
+      {
+        "name": "gã ep. — vinyl",
+        "category": "vinyl",
+        "meta": "12\" · limited",
+        "status": "coming soon"
+      },
+      {
+        "name": "gã ep. — cd",
+        "category": "cd",
+        "meta": "digipak",
+        "status": "coming soon"
+      },
+      {
+        "name": "gã ep. — poster",
+        "category": "poster",
+        "meta": "18 × 24",
+        "status": "coming soon"
+      },
+      {
+        "name": "gã ep. — tee",
+        "category": "shirts",
+        "meta": "heavyweight cotton",
+        "status": "coming soon"
+      }
+    ]
+  },
   "resume": {
     "label": "resume",
     "expandable": true,

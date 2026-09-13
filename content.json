@@ -166,6 +166,39 @@
     ]
   },
 
+  "_merch": "The merch page. \"season\" is the big type at the top — change it each drop. \"categories\" become the filter bars; the first one is the catch-all and shows everything. Every product's \"category\" must match one of them or the build stops. Give a product an \"img\" (a photo id from artwork/) once you have product shots; without one it falls back to generated artwork so the grid is never empty.",
+  "merch": {
+    "season": "gã ep.",
+    "note": "first drop — coming soon",
+    "categories": ["all", "cd", "vinyl", "poster", "shirts", "bag"],
+    "featured": [
+      {
+        "name": "gã ep. — vinyl",
+        "category": "vinyl",
+        "meta": "12\" · limited",
+        "status": "coming soon"
+      },
+      {
+        "name": "gã ep. — cd",
+        "category": "cd",
+        "meta": "digipak",
+        "status": "coming soon"
+      },
+      {
+        "name": "gã ep. — poster",
+        "category": "poster",
+        "meta": "18 × 24",
+        "status": "coming soon"
+      },
+      {
+        "name": "gã ep. — tee",
+        "category": "shirts",
+        "meta": "heavyweight cotton",
+        "status": "coming soon"
+      }
+    ]
+  },
+
   "_resume": "On the About page. Each entry has four optional fields: period (left column), title, subtitle (sits under the title), and detail (right column). Leave any of them out and that part is simply omitted. A section can also carry \"text\" for a line of prose under its heading. A section with \"from\": \"projects\" builds itself from your projects list, so you never type a release twice. Set \"expandable\" to false to have the resume always open instead of behind a button. Anything marked TODO is a placeholder I could not fill in for you — the build warns until you replace it.",
   "resume": {
     "label": "resume",
