@@ -65,6 +65,13 @@
     return out;
   }
 
+  /** Prices are plain numbers in content.json; the symbol lives in shop. */
+  function money(n) {
+    if (typeof n !== 'number') return 'price tbd';
+    var cur = (MERCH.shop && MERCH.shop.currency) || '$';
+    return cur + n.toFixed(2);
+  }
+
   function findProject(slug) {
     for (var i = 0; i < PROJECTS.length; i++) {
       if (PROJECTS[i].slug === slug) return { p: PROJECTS[i], i: i };
@@ -346,8 +353,25 @@
     }).join('');
 
     var cards = items.map(function (p, i) {
+      var buyable = p.available === true;
+
+      var buy = buyable
+        ? [
+            '  <div class="buy">',
+            '    <div class="qty" role="group" aria-label="quantity">',
+            '      <button class="qty__btn" type="button" data-step="-1" aria-label="one fewer">&minus;</button>',
+            '      <input class="qty__n" type="text" inputmode="numeric" value="1"',
+            '             aria-label="quantity for ' + esc(p.name || '') + '">',
+            '      <button class="qty__btn" type="button" data-step="1" aria-label="one more">+</button>',
+            '    </div>',
+            '    <button class="btn-add" type="button" data-add="' + esc(p.id || '') + '">add to cart</button>',
+            '  </div>'
+          ].join('')
+        : '  <p class="mitem__soon">' + esc(p.status || 'not available yet') + '</p>';
+
       return [
-        '<article class="mitem reveal" data-cat="' + esc(p.category || '') + '" style="--i:' + i + '">',
+        '<article class="mitem reveal" data-cat="' + esc(p.category || '') + '"',
+        '         data-id="' + esc(p.id || '') + '" style="--i:' + i + '">',
         '  <div class="mitem__art" data-art="' + esc(p.name || 'merch') + '"',
         '       data-img="' + esc(p.img || '') + '"',
         '       data-alt="' + esc(p.name || '') + '"></div>',
@@ -355,8 +379,9 @@
         '    <span class="mitem__cat">' + esc(p.category || '') + '</span>',
         '    <h3 class="mitem__name">' + esc(p.name || '') + '</h3>',
         p.meta ? '    <p class="mitem__spec">' + esc(p.meta) + '</p>' : '',
-        p.status ? '    <p class="mitem__status">' + esc(p.status) + '</p>' : '',
+        '    <p class="mitem__price">' + esc(money(p.price)) + '</p>',
         '  </div>',
+        buy,
         '</article>'
       ].join('');
     }).join('');
@@ -379,7 +404,56 @@
     ].join('');
   }
 
+  // Shared by the merch cards and the cart page.
+  function mountQtySteppers(scope) {
+    var groups = scope.querySelectorAll('.qty');
+
+    Array.prototype.forEach.call(groups, function (group) {
+      var input = group.querySelector('.qty__n');
+      if (!input) return;
+
+      var clamp = function (n) { return Math.max(1, Math.min(99, n || 1)); };
+
+      group.addEventListener('click', function (e) {
+        var btn = e.target.closest('.qty__btn');
+        if (!btn) return;
+        input.value = clamp(parseInt(input.value, 10) + Number(btn.dataset.step));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+
+      // typing is allowed, nonsense is not
+      input.addEventListener('change', function () {
+        input.value = clamp(parseInt(input.value, 10));
+      });
+    });
+  }
+
   function mountMerch() {
+    // add-to-cart lives on the merch grid
+    var grid = app.querySelector('.mgrid');
+    if (grid) {
+      mountQtySteppers(grid);
+
+      grid.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-add]');
+        if (!btn) return;
+
+        var card = btn.closest('.mitem');
+        var input = card && card.querySelector('.qty__n');
+        var qty = input ? parseInt(input.value, 10) || 1 : 1;
+
+        window.KLCart.add(btn.dataset.add, qty);
+
+        // brief confirmation, so it's obvious something happened
+        btn.classList.add('is-added');
+        btn.textContent = 'added';
+        setTimeout(function () {
+          btn.classList.remove('is-added');
+          btn.textContent = 'add to cart';
+        }, 1200);
+      });
+    }
+
     var nav = app.querySelector('.bars');
     if (!nav) return;
 
@@ -410,6 +484,173 @@
     });
   }
 
+  // --- cart --------------------------------------------------------------
+  function viewCart() {
+    var cart = window.KLCart;
+    var lines = cart ? cart.lines() : [];
+    var shop = MERCH.shop || {};
+
+    if (!lines.length) {
+      return [
+        '<section class="cart">',
+        '  <h1 class="cart__title reveal">cart</h1>',
+        '  <p class="cart__empty reveal">Nothing in here yet.</p>',
+        '  <a class="btn-line reveal" href="#/merch">back to merch</a>',
+        '</section>'
+      ].join('');
+    }
+
+    var rows = lines.map(function (l) {
+      var p = l.product;
+      var name = p ? p.name : 'no longer available';
+
+      return [
+        '<li class="line" data-line="' + esc(l.id) + '">',
+        '  <div class="line__art" data-art="' + esc(name) + '"',
+        '       data-img="' + esc((p && p.img) || '') + '" data-alt="' + esc(name) + '"></div>',
+        '  <div class="line__meta">',
+        '    <h3 class="line__name">' + esc(name) + '</h3>',
+        p && p.meta ? '    <p class="line__spec">' + esc(p.meta) + '</p>' : '',
+        '    <p class="line__unit">' + esc(money(l.price)) + ' each</p>',
+        '  </div>',
+        '  <div class="qty" role="group" aria-label="quantity">',
+        '    <button class="qty__btn" type="button" data-step="-1" aria-label="one fewer">&minus;</button>',
+        '    <input class="qty__n" type="text" inputmode="numeric" value="' + l.qty + '"',
+        '           aria-label="quantity for ' + esc(name) + '">',
+        '    <button class="qty__btn" type="button" data-step="1" aria-label="one more">+</button>',
+        '  </div>',
+        '  <p class="line__total">' + esc(l.total === null ? '—' : money(l.total)) + '</p>',
+        '  <button class="line__rm" type="button" data-remove="' + esc(l.id) + '"',
+        '          aria-label="remove ' + esc(name) + '">&times;</button>',
+        '</li>'
+      ].join('');
+    }).join('');
+
+    var unpriced = cart.hasUnpriced();
+
+    return [
+      '<section class="cart">',
+      '  <h1 class="cart__title reveal">cart</h1>',
+      '  <ul class="cart__lines">' + rows + '</ul>',
+      '  <div class="cart__foot reveal">',
+      '    <div class="cart__sum">',
+      '      <span>subtotal</span>',
+      '      <strong>' + esc(money(cart.subtotal())) + '</strong>',
+      '    </div>',
+      unpriced
+        ? '    <p class="cart__warn">Some items aren&rsquo;t priced yet, so this total is incomplete.</p>'
+        : '    <p class="cart__warn">Shipping and tax are worked out at checkout.</p>',
+      '    <div class="cart__acts">',
+      '      <a class="btn-line" href="#/merch">keep looking</a>',
+      '      <a class="btn-solid" href="#/checkout">checkout</a>',
+      '    </div>',
+      '  </div>',
+      '</section>'
+    ].join('');
+  }
+
+  // --- checkout ----------------------------------------------------------
+  // Deliberately no name, address, or card fields. This site is static
+  // files with no server behind it — anything typed here would have
+  // nowhere to go. The handoff below is where a real processor takes over,
+  // collects those details on its own secure pages, and sends the receipt.
+  function viewCheckout() {
+    var cart = window.KLCart;
+    var lines = cart ? cart.lines() : [];
+    var shop = MERCH.shop || {};
+
+    if (!lines.length) {
+      return [
+        '<section class="cart">',
+        '  <h1 class="cart__title reveal">checkout</h1>',
+        '  <p class="cart__empty reveal">There&rsquo;s nothing to check out.</p>',
+        '  <a class="btn-line reveal" href="#/merch">back to merch</a>',
+        '</section>'
+      ].join('');
+    }
+
+    var rows = lines.map(function (l) {
+      var name = l.product ? l.product.name : 'no longer available';
+      return [
+        '<li class="review__row">',
+        '<span class="review__qty">' + l.qty + '&times;</span>',
+        '<span class="review__name">' + esc(name) + '</span>',
+        '<span class="review__total">' + esc(l.total === null ? '—' : money(l.total)) + '</span>',
+        '</li>'
+      ].join('');
+    }).join('');
+
+    var canPay = shop.open === true && !!shop.checkoutUrl;
+
+    var handoff = canPay
+      ? '<a class="btn-solid" href="' + esc(shop.checkoutUrl) + '"' +
+        ' target="_blank" rel="noopener noreferrer">continue to payment</a>'
+      : [
+          '<div class="notopen">',
+          '  <p>' + esc(shop.closedNote || 'The shop isn’t open yet.') + '</p>',
+          '</div>'
+        ].join('');
+
+    return [
+      '<section class="cart">',
+      '  <h1 class="cart__title reveal">checkout</h1>',
+      '  <p class="cart__lead reveal">Check the order, then payment and delivery details ' +
+         'are handled on the payment provider&rsquo;s own secure pages.</p>',
+      '  <ul class="review reveal">' + rows + '</ul>',
+      '  <div class="review__sum reveal">',
+      '    <span>subtotal</span><strong>' + esc(money(cart.subtotal())) + '</strong>',
+      '  </div>',
+      '  <div class="cart__acts reveal">',
+      '    <a class="btn-line" href="#/cart">back to cart</a>',
+      handoff,
+      '  </div>',
+      '</section>'
+    ].join('');
+  }
+
+  function refreshCart() {
+    if (app.dataset.route !== 'cart') return;
+    app.innerHTML = viewCart();
+    wireUp();
+    // already on screen — don't replay the entrance animation
+    Array.prototype.forEach.call(app.querySelectorAll('.reveal'), function (el) {
+      el.classList.add('is-in');
+    });
+  }
+
+  function mountCart() {
+    var box = app.querySelector('.cart');
+    if (!box || !window.KLCart) return;
+
+    mountQtySteppers(box);
+
+    box.addEventListener('click', function (e) {
+      var rm = e.target.closest('[data-remove]');
+      if (!rm) return;
+      window.KLCart.remove(rm.dataset.remove);
+      refreshCart();
+    });
+
+    box.addEventListener('change', function (e) {
+      var input = e.target.closest('.qty__n');
+      if (!input) return;
+      var line = input.closest('[data-line]');
+      if (!line) return;
+      window.KLCart.setQty(line.dataset.line, input.value);
+      refreshCart();
+    });
+  }
+
+  function mountCartBadge() {
+    var badge = document.querySelector('[data-cart-count]');
+    if (!badge || !window.KLCart) return;
+
+    window.KLCart.subscribe(function (lines, count) {
+      badge.textContent = count;
+      badge.hidden = count === 0;
+    });
+  }
+
   function viewMissing() {
     return '<section class="missing"><h1>not here</h1><a href="#/">back to index</a></section>';
   }
@@ -427,6 +668,8 @@
     }
     if (parts[0] === 'stills') return { name: 'stills', html: viewStills };
     if (parts[0] === 'merch') return { name: 'merch', html: viewMerch };
+    if (parts[0] === 'cart') return { name: 'cart', html: viewCart };
+    if (parts[0] === 'checkout') return { name: 'checkout', html: viewCheckout };
     if (parts[0] === 'about') return { name: 'about', html: viewAbout };
     return { name: 'missing', html: viewMissing };
   }
@@ -480,6 +723,7 @@
     mountName();
     mountResume();
     mountMerch();
+    mountCart();
   }
 
   // --- intro overlay ----------------------------------------------------
@@ -881,6 +1125,7 @@
     if (y) y.textContent = new Date().getFullYear();
 
     mountIntro();
+    mountCartBadge();
     mountGL();
     render();
   }

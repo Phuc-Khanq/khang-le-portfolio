@@ -170,30 +170,53 @@
   "merch": {
     "season": "gã ep.",
     "note": "first drop — coming soon",
+
+    "_shop": "currency is a symbol, printed in front of prices. checkoutUrl is where the cart hands off when you're ready to sell: a Stripe payment link, a Shopify cart, a Bandcamp page. Leave it empty and checkout shows a not-open-yet notice instead. Nothing on this site ever collects card or address details — that happens on the processor's own secure pages.",
+    "shop": {
+      "open": false,
+      "currency": "$",
+      "checkoutUrl": "",
+      "closedNote": "The shop isn't open yet. Add your email below and I'll tell you when it is."
+    },
+
     "categories": ["all", "cd", "vinyl", "poster", "shirts", "bag"],
+
+    "_featured": "id must be unique — it's what the cart stores. price is a number with no symbol, or null while it's undecided. available:false keeps a product visible but not purchasable, which is what you want before a drop.",
     "featured": [
       {
+        "id": "ga-ep-vinyl",
         "name": "gã ep. — vinyl",
         "category": "vinyl",
         "meta": "12\" · limited",
+        "price": null,
+        "available": false,
         "status": "coming soon"
       },
       {
+        "id": "ga-ep-cd",
         "name": "gã ep. — cd",
         "category": "cd",
         "meta": "digipak",
+        "price": null,
+        "available": false,
         "status": "coming soon"
       },
       {
+        "id": "ga-ep-poster",
         "name": "gã ep. — poster",
         "category": "poster",
         "meta": "18 × 24",
+        "price": null,
+        "available": false,
         "status": "coming soon"
       },
       {
+        "id": "ga-ep-tee",
         "name": "gã ep. — tee",
         "category": "shirts",
         "meta": "heavyweight cotton",
+        "price": null,
+        "available": false,
         "status": "coming soon"
       }
     ]

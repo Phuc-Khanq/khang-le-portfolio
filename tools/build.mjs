@@ -195,9 +195,23 @@ if (merch) {
   }
   if (!merch.season) warn('merch has no "season" — the big type at the top will be blank.');
 
+  const seenIds = new Map();
+
   (merch.featured || []).forEach((p, i) => {
     const at = `merch.featured[${i}]`;
     if (!p.name) fail(at, 'missing "name"');
+
+    // id is what the cart stores, so it has to be present and unique
+    if (!p.id) {
+      fail(at, 'missing "id"', 'A short unique name like "ga-ep-vinyl". The cart stores this.');
+    } else if (seenIds.has(p.id)) {
+      fail(at, `duplicate id "${p.id}"`,
+           `Already used by merch.featured[${seenIds.get(p.id)}]. Two products sharing an id ` +
+           `would share a cart line — adding one would change the other.`);
+    } else {
+      seenIds.set(p.id, i);
+    }
+
     if (!p.category) {
       fail(at, 'missing "category"', `One of: ${cats.join(', ')}`);
     } else if (cats.length && !cats.includes(p.category)) {
@@ -205,8 +219,32 @@ if (merch) {
            `Add it to the list, or use one of: ${cats.join(', ')}. ` +
            `A product in a category with no bar can never be filtered to.`);
     }
+
+    // Anything buyable needs a real price — a cart that can't total is worse
+    // than a product that isn't for sale yet.
+    if (p.available) {
+      if (typeof p.price !== 'number' || !(p.price >= 0)) {
+        fail(at, `"${p.name}" is available but has no numeric price`,
+             'Set "price" to a number (no currency symbol), or set "available" to false.');
+      }
+      if (!merch.shop?.open) {
+        warn(`${at} "${p.name}" is available but merch.shop.open is false, ` +
+             `so checkout is still closed.`);
+      }
+    } else if (typeof p.price === 'number') {
+      warn(`${at} "${p.name}" has a price but available is false — it shows as not purchasable.`);
+    }
+
     noteRef(p.img, `${at} "${p.name || '?'}"`);
   });
+
+  // Selling with nowhere to send people is the one thing that would take money
+  // and lose the order.
+  if (merch.shop?.open && !merch.shop?.checkoutUrl) {
+    fail('merch.shop', 'open is true but checkoutUrl is empty',
+         'Checkout has to hand off to a payment processor — a Stripe payment link, ' +
+         'a Shopify cart, a Bandcamp page. Without one an order would go nowhere.');
+  }
 
   // a bar nobody can reach anything through is worth flagging, not failing
   for (const cat of cats.slice(1)) {

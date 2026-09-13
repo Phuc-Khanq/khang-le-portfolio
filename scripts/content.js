@@ -239,6 +239,12 @@ window.KLContent = {
   "merch": {
     "season": "gã ep.",
     "note": "first drop — coming soon",
+    "shop": {
+      "open": false,
+      "currency": "$",
+      "checkoutUrl": "",
+      "closedNote": "The shop isn't open yet. Add your email below and I'll tell you when it is."
+    },
     "categories": [
       "all",
       "cd",
@@ -249,27 +255,39 @@ window.KLContent = {
     ],
     "featured": [
       {
+        "id": "ga-ep-vinyl",
         "name": "gã ep. — vinyl",
         "category": "vinyl",
         "meta": "12\" · limited",
+        "price": null,
+        "available": false,
         "status": "coming soon"
       },
       {
+        "id": "ga-ep-cd",
         "name": "gã ep. — cd",
         "category": "cd",
         "meta": "digipak",
+        "price": null,
+        "available": false,
         "status": "coming soon"
       },
       {
+        "id": "ga-ep-poster",
         "name": "gã ep. — poster",
         "category": "poster",
         "meta": "18 × 24",
+        "price": null,
+        "available": false,
         "status": "coming soon"
       },
       {
+        "id": "ga-ep-tee",
         "name": "gã ep. — tee",
         "category": "shirts",
         "meta": "heavyweight cotton",
+        "price": null,
+        "available": false,
         "status": "coming soon"
       }
     ]
