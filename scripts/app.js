@@ -129,9 +129,112 @@
       '<section class="work">',
       '  <header class="sec-head reveal"><h2>work</h2><span>' + PROJECTS.length +
          (PROJECTS.length === 1 ? ' piece' : ' pieces') + '</span></header>',
-      '  <div class="grid">' + tiles + '</div>',
+      // Plain grid by default. mountWall turns it into the pinned
+      // horizontal track only when the browser can actually handle it,
+      // so no JS or a touch screen still gets something sensible.
+      '  <div class="wall">',
+      '    <div class="wall__stage">',
+      '      <div class="wall__track">' + tiles + '</div>',
+      '    </div>',
+      '  </div>',
+      '</section>',
+
+      viewSocial()
+    ].join('');
+  }
+
+  // --- social list -------------------------------------------------------
+  function viewSocial() {
+    var s = C.social || {};
+    var items = Array.isArray(s.items) ? s.items : [];
+    if (!items.length) return '';
+
+    var live = items.filter(function (x) { return x && x.url; }).length;
+
+    var rows = items.map(function (it, i) {
+      var on = !!(it && it.url);
+      var inner = [
+        '<span class="social__name">' + esc(it.platform || '') + '</span>',
+        '<span class="social__handle">' + esc(on ? (it.handle || '') : 'soon') + '</span>',
+        '<span class="social__mark" aria-hidden="true">' + (on ? '&rarr;' : '') + '</span>'
+      ].join('');
+
+      // No url means no link — a dead anchor is worse than an honest row.
+      return on
+        ? '<li class="social__row reveal" style="--i:' + (i % 6) + '">' +
+          '<a class="social__link" href="' + esc(it.url) + '"' +
+          ' target="_blank" rel="noopener noreferrer">' + inner + '</a></li>'
+        : '<li class="social__row is-soon reveal" style="--i:' + (i % 6) + '">' +
+          '<span class="social__link">' + inner + '</span></li>';
+    }).join('');
+
+    return [
+      '<section class="social">',
+      '  <header class="sec-head reveal"><h2>' + esc(s.title || 'elsewhere') + '</h2>',
+      '    <span>' + live + ' live</span></header>',
+      '  <ul class="social__list">' + rows + '</ul>',
       '</section>'
     ].join('');
+  }
+
+  // --- horizontal project wall -------------------------------------------
+  // Native scroll, one transform. The outer section is made tall enough to
+  // act as a runway; a sticky stage pins for its duration and the track
+  // slides left by exactly its own overflow.
+  function mountWall() {
+    var wall = app.querySelector('.wall');
+    if (!wall) return;
+
+    var stage = wall.querySelector('.wall__stage');
+    var track = wall.querySelector('.wall__track');
+    if (!stage || !track) return;
+
+    var coarse = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    if (coarse || reduceMotion) return;   // stays a normal grid
+
+    wall.classList.add('is-pinned');
+
+    var distance = 0;
+    var ticking = false;
+
+    function measure() {
+      distance = Math.max(0, track.scrollWidth - window.innerWidth);
+      // runway = one screen to pin, plus exactly the overflow to travel
+      wall.style.height = (window.innerHeight + distance) + 'px';
+      apply();
+    }
+
+    function apply() {
+      if (distance <= 0) {
+        track.style.transform = '';
+        return;
+      }
+      var top = wall.getBoundingClientRect().top;
+      var progress = Math.min(1, Math.max(0, -top / distance));
+      track.style.transform = 'translate3d(' + (-progress * distance).toFixed(1) + 'px,0,0)';
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        apply();
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measure);
+
+    measure();
+
+    // Scroll and resize are on window, so they outlive the DOM that
+    // render() throws away. Without this, every trip back to the index
+    // leaves another handler running against a detached element.
+    teardowns.push(function () {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', measure);
+    });
   }
 
   function viewProject(slug) {
@@ -676,6 +779,16 @@
 
   var rendering = false;
 
+  // Anything a view attaches outside #app has to be removed when that view
+  // goes away — window listeners survive innerHTML being replaced.
+  var teardowns = [];
+
+  function cleanUp() {
+    while (teardowns.length) {
+      try { teardowns.pop()(); } catch (e) {}
+    }
+  }
+
   function render() {
     if (rendering) return;
     rendering = true;
@@ -686,6 +799,7 @@
     app.classList.add('is-leaving');
 
     setTimeout(function () {
+      cleanUp();
       app.innerHTML = route.html();
       app.dataset.route = route.name;
       window.scrollTo(0, 0);
@@ -724,6 +838,7 @@
     mountResume();
     mountMerch();
     mountCart();
+    mountWall();
   }
 
   // --- intro overlay ----------------------------------------------------
@@ -896,7 +1011,16 @@
       });
     }, { rootMargin: '200px' });
 
-    Array.prototype.forEach.call(holders, function (h) { io.observe(h); });
+    Array.prototype.forEach.call(holders, function (h) {
+      // Tiles in the horizontal track start translated off to the right,
+      // so the observer wouldn't fire until they slide in and you'd watch
+      // them load one at a time. Ten small files — just fetch them.
+      if (h.closest && h.closest('.wall__track')) {
+        build(h);
+        return;
+      }
+      io.observe(h);
+    });
   }
 
   // --- reveal on scroll ---------------------------------------------

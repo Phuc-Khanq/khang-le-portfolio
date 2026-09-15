@@ -32,6 +32,19 @@
 
   "marquee": ["hip hop", "indie", "experimental"],
 
+  "_social": "The list under the project wall on the main page. An entry with an empty url shows as a dim 'soon' row rather than a dead link — fill in the url and it becomes clickable. Order here is order on the page.",
+  "social": {
+    "title": "elsewhere",
+    "items": [
+      { "platform": "instagram",   "handle": "@dr.khxng", "url": "https://www.instagram.com/dr.khxng/" },
+      { "platform": "spotify",     "handle": "",          "url": "" },
+      { "platform": "soundcloud",  "handle": "",          "url": "" },
+      { "platform": "youtube",     "handle": "",          "url": "" },
+      { "platform": "apple music", "handle": "",          "url": "" },
+      { "platform": "bandcamp",    "handle": "",          "url": "" }
+    ]
+  },
+
   "projects": [
     {
       "slug": "untitled",

@@ -253,6 +253,20 @@ if (merch) {
   }
 }
 
+// social — an entry with no url renders as "soon" rather than a dead link
+(content.social?.items || []).forEach((s, i) => {
+  const at = `social.items[${i}]`;
+  if (!s || !s.platform) {
+    fail(at, 'missing "platform"');
+    return;
+  }
+  if (s.url && !/^https?:\/\//i.test(s.url)) {
+    fail(at, `"${s.url}" isn't a full web address`,
+         'It needs to start with https:// or the browser treats it as a page on your own site.');
+  }
+  if (!s.url) warn(`social "${s.platform}" has no url yet — it shows as a "soon" row.`);
+});
+
 // the About headshot goes through the same image pipeline
 if (content.about?.headshot) {
   noteRef(content.about.headshot, 'about.headshot');

@@ -37,6 +37,41 @@ window.KLContent = {
     "indie",
     "experimental"
   ],
+  "social": {
+    "title": "elsewhere",
+    "items": [
+      {
+        "platform": "instagram",
+        "handle": "@dr.khxng",
+        "url": "https://www.instagram.com/dr.khxng/"
+      },
+      {
+        "platform": "spotify",
+        "handle": "",
+        "url": ""
+      },
+      {
+        "platform": "soundcloud",
+        "handle": "",
+        "url": ""
+      },
+      {
+        "platform": "youtube",
+        "handle": "",
+        "url": ""
+      },
+      {
+        "platform": "apple music",
+        "handle": "",
+        "url": ""
+      },
+      {
+        "platform": "bandcamp",
+        "handle": "",
+        "url": ""
+      }
+    ]
+  },
   "projects": [
     {
       "slug": "untitled",
