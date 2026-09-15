@@ -282,6 +282,49 @@ body.intro-open { overflow: hidden; }
   position: relative;
 }
 
+/* Name left, photo in the space to its right. */
+.hero__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.hero__text { min-width: 0; }
+
+.hero__portrait {
+  position: relative;
+  width: clamp(210px, 25vw, 400px);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  background-size: cover;
+  background-position: center;
+}
+
+.hero__portrait .art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 1.2s var(--ease), transform 1s var(--ease);
+}
+
+.hero__portrait .art.is-in { opacity: 1; transform: scale(1); }
+
+/* Once the name needs the full width, the photo drops beneath it. */
+@media (max-width: 900px) {
+  .hero__main { grid-template-columns: 1fr; }
+  .hero__portrait {
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 4 / 3;
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+
 .hero__eyebrow {
   font-family: var(--ui);
   font-size: 0.72rem;
@@ -469,7 +512,9 @@ body.intro-open { overflow: hidden; }
 }
 
 .wall.is-pinned .tile {
-  flex: 0 0 clamp(260px, 30vw, 440px);
+  /* Bigger pictures mean a wider track, and the runway is derived
+     from track width — so raising this also lengthens the scroll. */
+  flex: 0 0 clamp(320px, 40vw, 600px);
   min-width: 0;
 }
 

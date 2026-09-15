@@ -24,6 +24,8 @@
 
   "hero": {
     "_note": "Two lines, each a from/to pair of equal length. Line two is the outlined one.",
+    "_portrait": "Image id for the photo beside your name on the main page. Same rule as everywhere: a filename from artwork/. Remove this line and the name simply takes the full width.",
+    "portrait": "haz1026",
     "eyebrow": "artist · producer · engineer",
     "lineOne": { "from": "khang", "to": "khxng" },
     "lineTwo": { "from": "LE", "to": "LX" },

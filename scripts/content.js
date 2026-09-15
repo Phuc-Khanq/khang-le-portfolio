@@ -21,6 +21,7 @@ window.KLContent = {
     "to": "khxngLX"
   },
   "hero": {
+    "portrait": "haz1026",
     "eyebrow": "artist · producer · engineer",
     "lineOne": {
       "from": "khang",

@@ -109,16 +109,30 @@
     }).join('');
     var track = group + group + group + group;
 
+    // Fills the empty space to the right of the wordmark. Goes through
+    // the usual image pipeline, so it gets the blurred placeholder and
+    // the fade-in. No portrait in content and the name takes the width.
+    var heroShot = HERO.portrait
+      ? '<div class="hero__portrait reveal" data-art="portrait"' +
+        ' data-img="' + esc(HERO.portrait) + '" data-size="lg"' +
+        ' data-alt="' + esc(SITE.artistName || 'portrait') + '"></div>'
+      : '';
+
     return [
       '<section class="hero">',
-      '  <p class="hero__eyebrow reveal">' + esc(HERO.eyebrow || '') + '</p>',
-      '  <h1 class="hero__title reveal" id="wordmark" aria-label="' +
-           esc((SITE.artistName || '') + ' — ' + (SITE.givenName || '')) + '">',
-      '    <span class="ln" aria-hidden="true">' + glyphs(l1.from, l1.to) + '</span>',
-      '    <span class="ln ln--outline" aria-hidden="true">' + glyphs(l2.from, l2.to) + '</span>',
-      '  </h1>',
-      '  <p class="hero__alt" aria-hidden="true">' + esc(SITE.givenName || '') + '</p>',
-      '  <p class="hero__line reveal">' + esc(HERO.statement || '') + '</p>',
+      '  <div class="hero__main">',
+      '    <div class="hero__text">',
+      '      <p class="hero__eyebrow reveal">' + esc(HERO.eyebrow || '') + '</p>',
+      '      <h1 class="hero__title reveal" id="wordmark" aria-label="' +
+             esc((SITE.artistName || '') + ' — ' + (SITE.givenName || '')) + '">',
+      '        <span class="ln" aria-hidden="true">' + glyphs(l1.from, l1.to) + '</span>',
+      '        <span class="ln ln--outline" aria-hidden="true">' + glyphs(l2.from, l2.to) + '</span>',
+      '      </h1>',
+      '      <p class="hero__alt" aria-hidden="true">' + esc(SITE.givenName || '') + '</p>',
+      '      <p class="hero__line reveal">' + esc(HERO.statement || '') + '</p>',
+      '    </div>',
+      heroShot,
+      '  </div>',
       '  <canvas class="wave" aria-hidden="true"></canvas>',
       '</section>',
 

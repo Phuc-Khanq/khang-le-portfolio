@@ -267,9 +267,12 @@ if (merch) {
   if (!s.url) warn(`social "${s.platform}" has no url yet — it shows as a "soon" row.`);
 });
 
-// the About headshot goes through the same image pipeline
+// the About headshot and the hero portrait go through the same pipeline
 if (content.about?.headshot) {
   noteRef(content.about.headshot, 'about.headshot');
+}
+if (content.hero?.portrait) {
+  noteRef(content.hero.portrait, 'hero.portrait');
 }
 
 // Placeholders I couldn't fill in — nag until they're real.
