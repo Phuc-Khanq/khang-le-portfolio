@@ -195,35 +195,60 @@
     wall.classList.add('is-pinned');
 
     var distance = 0;
-    var ticking = false;
+
+    // A wheel notch scrolls the page 120px instantly, so mapping scroll to
+    // transform 1:1 left the track still for five frames then jumping the
+    // whole 120 at once — stuttery even at a steady 60fps. Instead the
+    // track eases toward where the scroll says it should be, so every
+    // frame moves a little. WALL_EASE is the dial: higher is tighter and
+    // more literal, lower is floatier and lags further behind.
+    var WALL_EASE = 0.11;
+    var current = 0;
+    var raf = null;
 
     function measure() {
       distance = Math.max(0, track.scrollWidth - window.innerWidth);
       // runway = one screen to pin, plus exactly the overflow to travel
       wall.style.height = (window.innerHeight + distance) + 'px';
-      apply();
+      current = readTarget();
+      draw();
+      kick();
     }
 
-    function apply() {
-      if (distance <= 0) {
-        track.style.transform = '';
-        return;
-      }
+    function readTarget() {
+      if (distance <= 0) return 0;
       var top = wall.getBoundingClientRect().top;
       var progress = Math.min(1, Math.max(0, -top / distance));
-      track.style.transform = 'translate3d(' + (-progress * distance).toFixed(1) + 'px,0,0)';
+      return -progress * distance;
     }
 
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        ticking = false;
-        apply();
-      });
+    function draw() {
+      // sub-pixel on purpose — rounding to whole px reintroduces the steps
+      track.style.transform = 'translate3d(' + current.toFixed(2) + 'px,0,0)';
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
+    function frame() {
+      var diff = readTarget() - current;
+
+      // Close enough: land exactly and stop the loop rather than burning
+      // frames forever on a fraction of a pixel.
+      if (Math.abs(diff) < 0.08) {
+        current += diff;
+        draw();
+        raf = null;
+        return;
+      }
+
+      current += diff * WALL_EASE;
+      draw();
+      raf = requestAnimationFrame(frame);
+    }
+
+    function kick() {
+      if (raf === null) raf = requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('scroll', kick, { passive: true });
     window.addEventListener('resize', measure);
 
     measure();
@@ -232,8 +257,9 @@
     // render() throws away. Without this, every trip back to the index
     // leaves another handler running against a detached element.
     teardowns.push(function () {
-      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', kick);
       window.removeEventListener('resize', measure);
+      if (raf !== null) cancelAnimationFrame(raf);
     });
   }
 
